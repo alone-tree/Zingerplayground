@@ -1,0 +1,49 @@
+<header class="site-header">
+  <nav class="site-nav">
+    <!-- Logo -->
+    <div class="site-logo">
+      <a href="{{ .Site.BaseURL }}">
+        <span class="logo-full">{{ .Site.Params.logo | default .Site.Title }}</span>
+        <span class="logo-short">{{ .Site.Params.logoShort | default "ZK" }}</span>
+      </a>
+    </div>
+    
+    <!-- 汉堡菜单按钮 (移动端) -->
+    <button class="menu-toggle" id="menu-toggle" aria-label="菜单">
+      ☰
+    </button>
+    
+    <!-- 导航菜单 -->
+    <ul class="nav-menu" id="nav-menu">
+      {{ range .Site.Menus.main }}
+        {{ if .HasChildren }}
+          <!-- 带下拉菜单的导航项 -->
+          <li class="nav-item">
+            <a href="{{ .URL }}">{{ .Name }}</a>
+            <ul class="dropdown-menu">
+              {{ range .Children }}
+                <li><a href="{{ .URL }}">{{ .Name }}</a></li>
+              {{ end }}
+            </ul>
+          </li>
+        {{ else }}
+          <!-- 普通导航项 -->
+          <li class="nav-item">
+            <a href="{{ .URL }}" {{ if $.IsMenuCurrent "main" . }}class="active"{{ end }}>
+              {{ .Name }}
+            </a>
+          </li>
+        {{ end }}
+      {{ end }}
+      
+      <!-- 深色模式切换按钮 -->
+      <li class="nav-item">
+        <button class="theme-toggle" id="theme-toggle" aria-label="切换深色模式">
+          <span class="theme-icon-light">☀️</span>
+          <span class="theme-icon-dark" style="display:none;">🌙</span>
+        </button>
+      </li>
+    </ul>
+  </nav>
+</header>
+

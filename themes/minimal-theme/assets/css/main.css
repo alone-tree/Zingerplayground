@@ -1,4 +1,336 @@
-:root { color-scheme: light dark; font-family: system-ui, sans-serif; }
-body { max-width: 720px; margin: auto; padding: 2rem; line-height: 1.6; }
-header, footer { opacity: .7; margin: 1rem 0; }
+/* ========================================
+   CSS 变量定义 - 配色方案
+   ======================================== */
+:root {
+  /* 配色方案 */
+  --color-dark-gray-blue: #2C3639;
+  --color-medium-gray-green: #3F4E4F;
+  --color-warm-brown: #A27B5C;
+  --color-light-beige: #DCD7C9;
+  
+  /* 浅色模式 */
+  --bg-color: #FFFFFF;
+  --bg-secondary: var(--color-light-beige);
+  --text-color: var(--color-dark-gray-blue);
+  --link-color: var(--color-warm-brown);
+  --link-hover: var(--color-medium-gray-green);
+  --border-color: rgba(44, 54, 57, 0.1);
+  --shadow-color: rgba(44, 54, 57, 0.1);
+  
+  /* 间距 */
+  --spacing-xs: 0.5rem;
+  --spacing-sm: 1rem;
+  --spacing-md: 2rem;
+  --spacing-lg: 3rem;
+  --spacing-xl: 4rem;
+  
+  /* 字体 */
+  --font-sans: "PingFang SC", "Microsoft YaHei", "Helvetica Neue", Arial, sans-serif;
+  --font-serif: "Songti SC", "SimSun", serif;
+  --font-mono: "SF Mono", "Monaco", "Consolas", monospace;
+  
+  /* 其他 */
+  --max-width: 1200px;
+  --nav-height: 60px;
+  --transition: 0.3s ease;
+}
 
+/* 深色模式 */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg-color: var(--color-dark-gray-blue);
+    --bg-secondary: var(--color-medium-gray-green);
+    --text-color: var(--color-light-beige);
+    --link-color: var(--color-warm-brown);
+    --link-hover: var(--color-light-beige);
+    --border-color: rgba(220, 215, 201, 0.2);
+    --shadow-color: rgba(0, 0, 0, 0.3);
+  }
+}
+
+/* 深色模式切换 - 通过 class 控制 */
+body.dark-mode {
+  --bg-color: var(--color-dark-gray-blue);
+  --bg-secondary: var(--color-medium-gray-green);
+  --text-color: var(--color-light-beige);
+  --link-color: var(--color-warm-brown);
+  --link-hover: var(--color-light-beige);
+  --border-color: rgba(220, 215, 201, 0.2);
+  --shadow-color: rgba(0, 0, 0, 0.3);
+}
+
+/* ========================================
+   基础样式
+   ======================================== */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 16px;
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-sans);
+  color: var(--text-color);
+  background-color: var(--bg-color);
+  line-height: 1.6;
+  transition: background-color var(--transition), color var(--transition);
+}
+
+/* ========================================
+   排版
+   ======================================== */
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 600;
+  line-height: 1.3;
+  margin-bottom: var(--spacing-sm);
+}
+
+h1 { font-size: 2.5rem; }
+h2 { font-size: 2rem; }
+h3 { font-size: 1.75rem; }
+h4 { font-size: 1.5rem; }
+h5 { font-size: 1.25rem; }
+h6 { font-size: 1rem; }
+
+p {
+  margin-bottom: var(--spacing-sm);
+}
+
+a {
+  color: var(--link-color);
+  text-decoration: none;
+  transition: color var(--transition);
+}
+
+a:hover {
+  color: var(--link-hover);
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* ========================================
+   布局容器
+   ======================================== */
+.container {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 0 var(--spacing-md);
+}
+
+.container-narrow {
+  max-width: 750px;
+  margin: 0 auto;
+  padding: 0 var(--spacing-md);
+}
+
+/* ========================================
+   导航栏
+   ======================================== */
+.site-header {
+  height: var(--nav-height);
+  background-color: var(--bg-color);
+  border-bottom: 1px solid var(--border-color);
+  position: relative;
+  transition: background-color var(--transition);
+}
+
+.site-nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 100%;
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 0 var(--spacing-md);
+}
+
+.site-logo a {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--text-color);
+}
+
+.nav-menu {
+  display: flex;
+  gap: var(--spacing-md);
+  list-style: none;
+  align-items: center;
+}
+
+.nav-menu a {
+  color: var(--text-color);
+  padding: var(--spacing-xs) var(--spacing-sm);
+  border-radius: 4px;
+  transition: background-color var(--transition), color var(--transition);
+}
+
+.nav-menu a:hover,
+.nav-menu a.active {
+  background-color: rgba(162, 123, 92, 0.2);
+  color: var(--link-color);
+}
+
+/* 下拉菜单 */
+.nav-item {
+  position: relative;
+}
+
+.dropdown-menu {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background-color: var(--bg-color);
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  box-shadow: 0 4px 8px var(--shadow-color);
+  min-width: 150px;
+  padding: var(--spacing-xs) 0;
+  margin-top: var(--spacing-xs);
+  list-style: none;
+}
+
+.nav-item:hover .dropdown-menu {
+  display: block;
+}
+
+.dropdown-menu a {
+  display: block;
+  padding: var(--spacing-xs) var(--spacing-sm);
+}
+
+/* 深色模式切换按钮 */
+.theme-toggle {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 1.25rem;
+  color: var(--text-color);
+  padding: var(--spacing-xs);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color var(--transition);
+}
+
+.theme-toggle:hover {
+  color: var(--link-color);
+}
+
+/* 移动端汉堡菜单 */
+.menu-toggle {
+  display: none;
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  color: var(--text-color);
+}
+
+/* ========================================
+   Hero 横幅
+   ======================================== */
+.hero {
+  position: relative;
+  width: 100%;
+  height: 60vh;
+  min-height: 400px;
+  overflow: hidden;
+}
+
+.hero-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+
+.hero-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(to bottom, rgba(0,0,0,0) 0%, rgba(0,0,0,0.3) 100%);
+}
+
+/* ========================================
+   页面淡入动画
+   ======================================== */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.fade-in {
+  animation: fadeIn 0.6s ease-out;
+}
+
+/* ========================================
+   响应式设计
+   ======================================== */
+@media (max-width: 768px) {
+  :root {
+    --nav-height: 56px;
+  }
+  
+  h1 { font-size: 2rem; }
+  h2 { font-size: 1.75rem; }
+  h3 { font-size: 1.5rem; }
+  
+  .site-logo .logo-full {
+    display: none;
+  }
+  
+  .site-logo .logo-short {
+    display: inline;
+  }
+  
+  .nav-menu {
+    display: none;
+  }
+  
+  .menu-toggle {
+    display: block;
+  }
+  
+  /* 移动端菜单展开样式 */
+  .nav-menu.active {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    top: var(--nav-height);
+    left: 0;
+    width: 100%;
+    background-color: var(--bg-color);
+    border-bottom: 1px solid var(--border-color);
+    padding: var(--spacing-sm);
+    gap: 0;
+  }
+  
+  .hero {
+    height: 40vh;
+    min-height: 300px;
+  }
+}
+
+@media (min-width: 769px) {
+  .site-logo .logo-short {
+    display: none;
+  }
+}

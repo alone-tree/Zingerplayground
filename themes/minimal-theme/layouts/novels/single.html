@@ -1,0 +1,203 @@
+{{ define "title" }}{{ .Title }} | {{ .Site.Title }}{{ end }}
+{{ define "main" }}
+<article class="novel-single">
+  <div class="container-narrow">
+    <!-- 小说标题 -->
+    <header class="novel-header">
+      <h1>{{ .Title }}</h1>
+    </header>
+    
+    <!-- 小说正文 -->
+    <div class="novel-content">
+      {{ .Content }}
+    </div>
+    
+    <!-- 小说元信息（底部） -->
+    <footer class="novel-footer">
+      <div class="novel-meta-bottom">
+        {{ if .Params.novel }}
+          <div class="meta-item">
+            <strong>所属小说：</strong>{{ .Params.novel }}
+          </div>
+        {{ end }}
+        
+        {{ if .Date }}
+          <div class="meta-item">
+            <strong>发布时间：</strong>{{ .Date.Format "2006年01月02日" }}
+          </div>
+        {{ end }}
+        
+        {{ if .Lastmod }}
+          <div class="meta-item">
+            <strong>更新时间：</strong>{{ .Lastmod.Format "2006年01月02日" }}
+          </div>
+        {{ end }}
+        
+        {{ if .WordCount }}
+          <div class="meta-item">
+            <strong>字数：</strong>{{ .WordCount }} 字
+          </div>
+        {{ end }}
+        
+        {{ if .ReadingTime }}
+          <div class="meta-item">
+            <strong>阅读时间：</strong>约 {{ .ReadingTime }} 分钟
+          </div>
+        {{ end }}
+        
+        {{ if .Params.tags }}
+          <div class="meta-item">
+            <strong>标签：</strong>
+            {{ range .Params.tags }}
+              <a href="/tags/{{ . | urlize }}" class="tag">{{ . }}</a>
+            {{ end }}
+          </div>
+        {{ end }}
+      </div>
+      
+      <!-- 导航链接 -->
+      <div class="novel-navigation">
+        {{ with .PrevInSection }}
+          <a href="{{ .RelPermalink }}" class="nav-link nav-prev">
+            ← {{ .Title }}
+          </a>
+        {{ end }}
+        
+        <a href="/novels/" class="nav-link nav-list">返回列表</a>
+        
+        {{ with .NextInSection }}
+          <a href="{{ .RelPermalink }}" class="nav-link nav-next">
+            {{ .Title }} →
+          </a>
+        {{ end }}
+      </div>
+    </footer>
+  </div>
+</article>
+
+<style>
+.novel-single {
+  padding: var(--spacing-lg) 0;
+}
+
+.novel-header {
+  text-align: center;
+  margin-bottom: var(--spacing-lg);
+  padding-bottom: var(--spacing-md);
+  border-bottom: 2px solid var(--border-color);
+}
+
+.novel-header h1 {
+  font-size: 2.5rem;
+  font-weight: 600;
+  color: var(--text-color);
+  margin-bottom: 0;
+}
+
+.novel-content {
+  font-family: var(--font-serif);
+  font-size: 17px;
+  line-height: 1.8;
+  color: var(--text-color);
+  margin-bottom: var(--spacing-xl);
+}
+
+.novel-content p {
+  margin-bottom: 1.5em;
+  text-indent: 2em;
+}
+
+.novel-content p:first-child {
+  text-indent: 0;
+}
+
+.novel-content h2,
+.novel-content h3,
+.novel-content h4 {
+  font-family: var(--font-sans);
+  margin-top: var(--spacing-lg);
+  margin-bottom: var(--spacing-md);
+  text-indent: 0;
+}
+
+.novel-footer {
+  border-top: 2px solid var(--border-color);
+  padding-top: var(--spacing-lg);
+}
+
+.novel-meta-bottom {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+  margin-bottom: var(--spacing-lg);
+  padding: var(--spacing-md);
+  background-color: var(--bg-secondary);
+  border-radius: 8px;
+  font-size: 0.95rem;
+}
+
+.meta-item {
+  display: flex;
+  gap: var(--spacing-xs);
+}
+
+.meta-item strong {
+  font-weight: 600;
+  min-width: 80px;
+}
+
+.novel-navigation {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--spacing-sm);
+  flex-wrap: wrap;
+}
+
+.nav-link {
+  flex: 1;
+  min-width: 120px;
+  padding: var(--spacing-sm) var(--spacing-md);
+  text-align: center;
+  background-color: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  transition: all var(--transition);
+}
+
+.nav-link:hover {
+  background-color: var(--link-color);
+  color: white;
+  border-color: var(--link-color);
+}
+
+.nav-list {
+  background-color: var(--link-color);
+  color: white;
+  border-color: var(--link-color);
+}
+
+.nav-list:hover {
+  background-color: var(--link-hover);
+  border-color: var(--link-hover);
+}
+
+@media (max-width: 768px) {
+  .novel-header h1 {
+    font-size: 2rem;
+  }
+  
+  .novel-content {
+    font-size: 16px;
+  }
+  
+  .novel-navigation {
+    flex-direction: column;
+  }
+  
+  .nav-link {
+    min-width: auto;
+  }
+}
+</style>
+{{ end }}
+

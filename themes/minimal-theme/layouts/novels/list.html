@@ -1,0 +1,159 @@
+{{ define "title" }}{{ .Title }} | {{ .Site.Title }}{{ end }}
+{{ define "main" }}
+<article class="novel-section">
+  <div class="container-narrow">
+    <!-- 小说标题 -->
+    <header class="novel-header">
+      <h1>{{ .Title }}</h1>
+      {{ if .Params.description }}
+        <p class="novel-description">{{ .Params.description }}</p>
+      {{ end }}
+    </header>
+    
+    <!-- 小说简介内容 -->
+    <div class="novel-intro">
+      {{ .Content }}
+    </div>
+    
+    <!-- 章节列表 -->
+    {{ if .Pages }}
+    <section class="chapters-list">
+      <h2>章节列表</h2>
+      <ol class="chapters">
+        {{ range .Pages.ByParam "chapter" }}
+          <li class="chapter-item">
+            <a href="{{ .RelPermalink }}">
+              <span class="chapter-title">{{ .Title }}</span>
+              {{ if .Date }}
+                <span class="chapter-date">{{ .Date.Format "2006-01-02" }}</span>
+              {{ end }}
+            </a>
+          </li>
+        {{ end }}
+      </ol>
+    </section>
+    {{ end }}
+    
+    <!-- 返回链接 -->
+    <div class="back-link">
+      <a href="/novels/" class="btn">← 返回小说列表</a>
+    </div>
+  </div>
+</article>
+
+<style>
+.novel-section {
+  padding: var(--spacing-lg) 0;
+}
+
+.novel-header {
+  text-align: center;
+  margin-bottom: var(--spacing-lg);
+  padding-bottom: var(--spacing-md);
+  border-bottom: 2px solid var(--border-color);
+}
+
+.novel-header h1 {
+  font-size: 2.5rem;
+  margin-bottom: var(--spacing-sm);
+}
+
+.novel-description {
+  font-size: 1.1rem;
+  color: var(--text-color);
+  opacity: 0.8;
+  margin-bottom: 0;
+}
+
+.novel-intro {
+  margin-bottom: var(--spacing-xl);
+  font-size: 1rem;
+  line-height: 1.8;
+}
+
+.novel-intro h2 {
+  font-size: 1.75rem;
+  margin-top: var(--spacing-lg);
+  margin-bottom: var(--spacing-md);
+}
+
+.chapters-list {
+  margin-bottom: var(--spacing-xl);
+}
+
+.chapters-list h2 {
+  font-size: 2rem;
+  margin-bottom: var(--spacing-md);
+  padding-bottom: var(--spacing-sm);
+  border-bottom: 1px solid var(--border-color);
+}
+
+.chapters {
+  list-style: none;
+  counter-reset: chapter;
+  padding: 0;
+}
+
+.chapter-item {
+  margin-bottom: var(--spacing-sm);
+  counter-increment: chapter;
+}
+
+.chapter-item a {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--spacing-sm) var(--spacing-md);
+  background-color: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  transition: all var(--transition);
+  color: var(--text-color);
+}
+
+.chapter-item a:hover {
+  background-color: var(--link-color);
+  border-color: var(--link-color);
+  color: white;
+  transform: translateX(4px);
+}
+
+.chapter-item a::before {
+  content: "第 " counter(chapter) " 章";
+  font-weight: 600;
+  margin-right: var(--spacing-sm);
+  opacity: 0.7;
+}
+
+.chapter-title {
+  flex: 1;
+}
+
+.chapter-date {
+  font-size: 0.9rem;
+  opacity: 0.7;
+  margin-left: var(--spacing-sm);
+}
+
+.back-link {
+  text-align: center;
+  padding-top: var(--spacing-lg);
+  border-top: 1px solid var(--border-color);
+}
+
+@media (max-width: 768px) {
+  .novel-header h1 {
+    font-size: 2rem;
+  }
+  
+  .chapter-item a::before {
+    display: none;
+  }
+  
+  .chapter-date {
+    display: none;
+  }
+}
+</style>
+{{ end }}
+

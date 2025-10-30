@@ -1,0 +1,200 @@
+{{ define "title" }}{{ .Title }} | {{ .Site.Title }}{{ end }}
+{{ define "main" }}
+<div class="container">
+  <section class="novels-page">
+    <h1>{{ .Title }}</h1>
+    
+    <!-- 中长篇/短篇分类按钮 -->
+    <div class="category-tabs">
+      <button class="tab-button active" data-category="all">全部</button>
+      <button class="tab-button" data-category="中长篇">中长篇</button>
+      <button class="tab-button" data-category="短篇">短篇</button>
+    </div>
+    
+    <!-- 小说列表 -->
+    <div class="novels-grid">
+      {{ range .Pages }}
+        <article class="novel-card" data-category="{{ .Params.category }}">
+          {{ if .Params.cover }}
+            <div class="novel-cover">
+              <img src="{{ .Params.cover }}" alt="{{ .Title }}" loading="lazy" />
+            </div>
+          {{ else }}
+            <div class="novel-cover novel-cover-default">
+              <img src="/images/default/novel-cover.jpg" alt="{{ .Title }}" loading="lazy" />
+            </div>
+          {{ end }}
+          
+          <div class="novel-info">
+            <h2><a href="{{ .RelPermalink }}">{{ .Title }}</a></h2>
+            {{ if .Params.description }}
+              <p class="novel-description">{{ .Params.description }}</p>
+            {{ else }}
+              <p class="novel-description">{{ .Summary }}</p>
+            {{ end }}
+            
+            <div class="novel-meta">
+              {{ if .Params.category }}
+                <span class="novel-category">{{ .Params.category }}</span>
+              {{ end }}
+              <span class="novel-date">{{ .Lastmod.Format "2006-01-02" }}</span>
+              {{ if .Params.tags }}
+                {{ range first 2 .Params.tags }}
+                  <span class="tag">{{ . }}</span>
+                {{ end }}
+              {{ end }}
+            </div>
+          </div>
+        </article>
+      {{ end }}
+    </div>
+  </section>
+</div>
+
+<style>
+.novels-page {
+  padding: 3rem 0;
+}
+
+.novels-page h1 {
+  font-size: 2.5rem;
+  margin-bottom: 2rem;
+  text-align: center;
+}
+
+.category-tabs {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-bottom: 3rem;
+}
+
+.tab-button {
+  padding: 0.5rem 1rem;
+  background-color: transparent;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  color: #2C3639;
+}
+
+.tab-button:hover,
+.tab-button.active {
+  background-color: rgba(162, 123, 92, 0.2);
+  border-color: #A27B5C;
+  color: #A27B5C;
+}
+
+.novels-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 2rem;
+}
+
+.novel-card {
+  background-color: #f5f5f5;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.novel-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+}
+
+.novel-cover {
+  width: 100%;
+  aspect-ratio: 3 / 2;
+  overflow: hidden;
+  background-color: #ddd;
+}
+
+.novel-cover img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.novel-info {
+  padding: 1.5rem;
+}
+
+.novel-info h2 {
+  font-size: 1.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.novel-info h2 a {
+  color: #2C3639;
+}
+
+.novel-description {
+  font-size: 0.95rem;
+  line-height: 1.6;
+  margin-bottom: 1rem;
+  opacity: 0.8;
+  color: #333;
+}
+
+.novel-meta {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  font-size: 0.85rem;
+}
+
+.novel-category {
+  background-color: #A27B5C;
+  color: white;
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+}
+
+.novel-date {
+  color: #666;
+}
+
+.tag {
+  background-color: rgba(162, 123, 92, 0.2);
+  color: #A27B5C;
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+}
+
+@media (max-width: 768px) {
+  .novels-grid {
+    grid-template-columns: 1fr;
+  }
+}
+</style>
+
+<script>
+// 分类筛选功能
+document.addEventListener('DOMContentLoaded', function() {
+  const tabs = document.querySelectorAll('.tab-button');
+  const cards = document.querySelectorAll('.novel-card');
+  
+  tabs.forEach(tab => {
+    tab.addEventListener('click', function() {
+      const category = this.dataset.category;
+      
+      // 更新按钮状态
+      tabs.forEach(t => t.classList.remove('active'));
+      this.classList.add('active');
+      
+      // 筛选卡片
+      cards.forEach(card => {
+        if (category === 'all' || card.dataset.category === category) {
+          card.style.display = 'block';
+        } else {
+          card.style.display = 'none';
+        }
+      });
+    });
+  });
+});
+</script>
+{{ end }}

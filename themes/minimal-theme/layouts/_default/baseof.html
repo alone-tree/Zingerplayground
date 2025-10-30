@@ -1,17 +1,42 @@
 <!doctype html>
-<html lang="zh-CN">
+<html lang="{{ .Site.LanguageCode | default `zh-CN` }}">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>{{ block "title" . }}{{ .Site.Title }}{{ end }}</title>
+    <title>{{ block "title" . }}{{ .Title }} | {{ .Site.Title }}{{ end }}</title>
+    
+    <!-- SEO -->
+    <meta name="description" content="{{ .Description | default .Site.Params.description }}" />
+    {{ if .Params.tags }}
+      <meta name="keywords" content="{{ delimit .Params.tags `,` }}" />
+    {{ end }}
+    
+    <!-- Open Graph -->
+    <meta property="og:title" content="{{ .Title }}" />
+    <meta property="og:description" content="{{ .Description | default .Site.Params.description }}" />
+    <meta property="og:type" content="{{ if .IsPage }}article{{ else }}website{{ end }}" />
+    <meta property="og:url" content="{{ .Permalink }}" />
+    
+    <!-- CSS -->
     {{ with resources.Get "css/main.css" | resources.Minify }}
       <link rel="stylesheet" href="{{ .RelPermalink }}" />
     {{ end }}
   </head>
-  <body>
-    <header><a href="/">{{ .Site.Title }}</a></header>
-    <main>{{ block "main" . }}{{ end }}</main>
-    <footer>© {{ now.Year }} · 由 Hugo 驱动</footer>
+  <body class="fade-in">
+    <!-- 导航栏 -->
+    {{ partial "header.html" . }}
+    
+    <!-- Hero 横幅 (仅首页) -->
+    {{ if .IsHome }}
+      {{ partial "hero.html" . }}
+    {{ end }}
+    
+    <!-- 主内容 -->
+    <main>
+      {{ block "main" . }}{{ end }}
+    </main>
+    
+    <!-- 页脚 -->
+    {{ partial "footer.html" . }}
   </body>
 </html>
-

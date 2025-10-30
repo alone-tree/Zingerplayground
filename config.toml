@@ -1,15 +1,86 @@
 baseURL = "https://zingerplayground.netlify.app/"
 languageCode = "zh-cn"
-title = "我的网站"
+title = "Zinger's Playground"
 
 defaultContentLanguage = "zh-cn"
-
-disableKinds = ["taxonomy", "term", "RSS", "sitemap"]
 
 # 启用 Git 信息（用于显示文章更新时间等）
 enableGitInfo = false
 
+# 启用标签功能
+[taxonomies]
+  tag = "tags"
+  category = "categories"
+
+# 导航菜单
+[menu]
+  [[menu.main]]
+    name = "首页"
+    url = "/"
+    weight = 1
+  
+  [[menu.main]]
+    name = "小说"
+    url = "/novels/"
+    weight = 2
+  
+  [[menu.main]]
+    name = "文章"
+    url = "/articles/"
+    weight = 3
+  
+  [[menu.main]]
+    name = "代码"
+    url = "/code/"
+    weight = 4
+  
+  [[menu.main]]
+    name = "其他"
+    identifier = "other"
+    weight = 5
+  
+  [[menu.main]]
+    name = "摄影"
+    parent = "other"
+    url = "/photography/"
+    weight = 51
+  
+  [[menu.main]]
+    name = "播客"
+    parent = "other"
+    url = "/podcast/"
+    weight = 52
+  
+  [[menu.main]]
+    name = "关于"
+    url = "/about/"
+    weight = 6
+
+# 网站参数
+[params]
+  # 网站描述
+  description = "不同平台太割裂，我选择自己建站"
+  
+  # Logo 文字
+  logo = "Zinger's Playground"
+  logoShort = "ZK"
+  
+  # 配色方案
+  [params.colors]
+    # 深灰蓝 - 用于深色模式背景、文字
+    darkGrayBlue = "#2C3639"
+    # 中灰绿 - 用于按钮、悬停效果、边框
+    mediumGrayGreen = "#3F4E4F"
+    # 暖棕色 - 用于链接、强调色、选中状态
+    warmBrown = "#A27B5C"
+    # 浅米色 - 用于浅色模式背景
+    lightBeige = "#DCD7C9"
+  
+  # Hero 横幅
+  [params.hero]
+    image = "/images/hero/mountain-sea.jpg"
+    height = "60vh"
+
 [module]
   [[module.imports]]
     path = "minimal-theme"
-
