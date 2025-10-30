@@ -1,0 +1,17 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{{ block "title" . }}{{ .Site.Title }}{{ end }}</title>
+    {{ with resources.Get "css/main.css" | resources.Minify }}
+      <link rel="stylesheet" href="{{ .RelPermalink }}" />
+    {{ end }}
+  </head>
+  <body>
+    <header><a href="/">{{ .Site.Title }}</a></header>
+    <main>{{ block "main" . }}{{ end }}</main>
+    <footer>© {{ now.Year }} · 由 Hugo 驱动</footer>
+  </body>
+</html>
+

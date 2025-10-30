@@ -1,0 +1,4 @@
+:root { color-scheme: light dark; font-family: system-ui, sans-serif; }
+body { max-width: 720px; margin: auto; padding: 2rem; line-height: 1.6; }
+header, footer { opacity: .7; margin: 1rem 0; }
+

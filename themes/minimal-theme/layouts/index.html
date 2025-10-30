@@ -1,0 +1,11 @@
+{{ define "title" }}{{ .Site.Title }}{{ end }}
+{{ define "main" }}
+  <h1>欢迎</h1>
+  <p>这是一个极简 Hugo Modules 驱动的网站。</p>
+  <ul>
+    {{ range first 5 (where .Site.RegularPages "Type" "posts") }}
+      <li><a href="{{ .RelPermalink }}">{{ .Title }}</a></li>
+    {{ end }}
+  </ul>
+{{ end }}
+
