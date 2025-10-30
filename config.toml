@@ -1,10 +1,13 @@
-baseURL = "http://localhost:1313/"
+baseURL = "https://zingerplayground.netlify.app/"
 languageCode = "zh-cn"
 title = "我的网站"
 
 defaultContentLanguage = "zh-cn"
 
 disableKinds = ["taxonomy", "term", "RSS", "sitemap"]
+
+# 启用 Git 信息（用于显示文章更新时间等）
+enableGitInfo = false
 
 [module]
   [[module.imports]]
