@@ -17,6 +17,9 @@
     <meta property="og:type" content="{{ if .IsPage }}article{{ else }}website{{ end }}" />
     <meta property="og:url" content="{{ .Permalink }}" />
     
+    <!-- Favicon -->
+    <link rel="icon" href="data:,">
+    
     <!-- CSS -->
     {{ with resources.Get "css/main.css" | resources.Minify }}
       <link rel="stylesheet" href="{{ .RelPermalink }}" />
