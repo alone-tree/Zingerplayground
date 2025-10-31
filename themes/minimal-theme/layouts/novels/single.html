@@ -15,18 +15,41 @@
     <!-- 导航链接 -->
     <footer class="novel-footer">
       <div class="novel-navigation">
-        {{ with .PrevInSection }}
-          <a href="{{ .RelPermalink }}" class="nav-link nav-prev">
-            ← {{ .Title }}
-          </a>
+        {{ $currentChapter := .Params.chapter }}
+        {{ $prevChapter := "" }}
+        {{ $nextChapter := "" }}
+        
+        {{ range where .Site.Pages "Params.novel" .Params.novel }}
+          {{ if .Params.chapter }}
+            {{ if eq (add .Params.chapter 1) $currentChapter }}
+              {{ $prevChapter = . }}
+            {{ end }}
+            {{ if eq (sub .Params.chapter 1) $currentChapter }}
+              {{ $nextChapter = . }}
+            {{ end }}
+          {{ end }}
         {{ end }}
         
-        <a href="/novels/" class="nav-link nav-list">返回列表</a>
-        
-        {{ with .NextInSection }}
-          <a href="{{ .RelPermalink }}" class="nav-link nav-next">
-            {{ .Title }} →
+        {{ if $prevChapter }}
+          <a href="{{ $prevChapter.RelPermalink }}" class="nav-link nav-prev">
+            ← 上一章
           </a>
+        {{ else }}
+          <button class="nav-link nav-prev nav-disabled" onclick="showMessage('已经是第一章了')">
+            ← 上一章
+          </button>
+        {{ end }}
+        
+        <a href="{{ .Parent.RelPermalink }}" class="nav-link nav-list">返回列表</a>
+        
+        {{ if $nextChapter }}
+          <a href="{{ $nextChapter.RelPermalink }}" class="nav-link nav-next">
+            下一章 →
+          </a>
+        {{ else }}
+          <button class="nav-link nav-next nav-disabled" onclick="showMessage('已经是最后一章了')">
+            下一章 →
+          </button>
         {{ end }}
       </div>
     </footer>
@@ -96,27 +119,55 @@
   min-width: 120px;
   padding: var(--spacing-sm) var(--spacing-md);
   text-align: center;
-  background-color: var(--bg-secondary);
-  border: 1px solid var(--border-color);
   border-radius: 4px;
   transition: all var(--transition);
+  cursor: pointer;
+  font-size: 1rem;
+  font-family: var(--font-sans);
 }
 
-.nav-link:hover {
-  background-color: var(--link-color);
-  color: white;
-  border-color: var(--link-color);
-}
-
+/* 上一章和返回列表 - 浅色背景 */
+.nav-prev,
 .nav-list {
-  background-color: var(--link-color);
-  color: white;
-  border-color: var(--link-color);
+  background-color: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  color: var(--text-color);
 }
 
+.nav-prev:hover,
 .nav-list:hover {
+  background-color: #e5e5e5;
+  border-color: #ccc;
+}
+
+/* 下一章 - 深色背景 */
+.nav-next {
+  background-color: var(--link-color);
+  color: white;
+  border: 1px solid var(--link-color);
+}
+
+.nav-next:hover {
   background-color: var(--link-hover);
   border-color: var(--link-hover);
+}
+
+/* 禁用状态 */
+.nav-disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.nav-prev.nav-disabled:hover {
+  background-color: var(--bg-secondary);
+  border-color: var(--border-color);
+  color: var(--text-color);
+}
+
+.nav-next.nav-disabled:hover {
+  background-color: var(--link-color);
+  border-color: var(--link-color);
+  color: white;
 }
 
 @media (max-width: 768px) {
@@ -136,6 +187,105 @@
     min-width: auto;
   }
 }
+
+/* 提示消息样式 */
+.message-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  animation: fadeIn 0.2s ease;
+}
+
+.message-box {
+  background-color: white;
+  padding: 2rem;
+  border-radius: 8px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+  max-width: 300px;
+  text-align: center;
+  animation: slideIn 0.3s ease;
+}
+
+.message-text {
+  font-size: 1.1rem;
+  color: var(--text-color);
+  margin-bottom: 1.5rem;
+}
+
+.message-button {
+  padding: 0.5rem 2rem;
+  background-color: var(--link-color);
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: background-color 0.3s ease;
+}
+
+.message-button:hover {
+  background-color: var(--link-hover);
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateY(-20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
 </style>
+
+<script>
+function showMessage(text) {
+  // 创建遮罩层
+  const overlay = document.createElement('div');
+  overlay.className = 'message-overlay';
+  
+  // 创建消息框
+  const messageBox = document.createElement('div');
+  messageBox.className = 'message-box';
+  
+  // 添加文本
+  const messageText = document.createElement('div');
+  messageText.className = 'message-text';
+  messageText.textContent = text;
+  
+  // 添加确定按钮
+  const button = document.createElement('button');
+  button.className = 'message-button';
+  button.textContent = '确定';
+  button.onclick = function() {
+    overlay.remove();
+  };
+  
+  messageBox.appendChild(messageText);
+  messageBox.appendChild(button);
+  overlay.appendChild(messageBox);
+  document.body.appendChild(overlay);
+  
+  // 点击遮罩层也可以关闭
+  overlay.onclick = function(e) {
+    if (e.target === overlay) {
+      overlay.remove();
+    }
+  };
+}
+</script>
 {{ end }}
 
