@@ -5,6 +5,7 @@ draft: false
 tags: ["科幻"]
 category: "中长篇"
 description: "一个关于时间、选择与命运的奇幻冒险故事。"
+layout: "list"
 ---
 
 ## 作品简介
