@@ -8,17 +8,26 @@
       </a>
     </div>
     
-    <!-- 汉堡菜单按钮 (移动端) -->
-    <button class="menu-toggle" id="menu-toggle" aria-label="菜单">
-      ☰
-    </button>
+    <!-- 右侧按钮组 (移动端) -->
+    <div class="mobile-controls">
+      <!-- 深色模式切换按钮 -->
+      <button class="theme-toggle" id="theme-toggle" aria-label="切换深色模式">
+        <span class="theme-icon-light">☀️</span>
+        <span class="theme-icon-dark" style="display:none;">🌙</span>
+      </button>
+      
+      <!-- 汉堡菜单按钮 -->
+      <button class="menu-toggle" id="menu-toggle" aria-label="菜单">
+        ☰
+      </button>
+    </div>
     
     <!-- 导航菜单 -->
     <ul class="nav-menu" id="nav-menu">
       {{ range .Site.Menus.main }}
         {{ if .HasChildren }}
-          <!-- 带下拉菜单的导航项 -->
-          <li class="nav-item">
+          <!-- 带下拉菜单的导航项 (桌面端) -->
+          <li class="nav-item nav-item-desktop">
             <a href="{{ .URL }}">{{ .Name }}</a>
             <ul class="dropdown-menu">
               {{ range .Children }}
@@ -26,6 +35,12 @@
               {{ end }}
             </ul>
           </li>
+          <!-- 移动端直接显示子菜单项 -->
+          {{ range .Children }}
+            <li class="nav-item nav-item-mobile">
+              <a href="{{ .URL }}">{{ .Name }}</a>
+            </li>
+          {{ end }}
         {{ else }}
           <!-- 普通导航项 -->
           <li class="nav-item">
@@ -36,9 +51,9 @@
         {{ end }}
       {{ end }}
       
-      <!-- 深色模式切换按钮 -->
-      <li class="nav-item">
-        <button class="theme-toggle" id="theme-toggle" aria-label="切换深色模式">
+      <!-- 深色模式切换按钮 (桌面端) -->
+      <li class="nav-item nav-item-desktop">
+        <button class="theme-toggle theme-toggle-desktop" id="theme-toggle-desktop" aria-label="切换深色模式">
           <span class="theme-icon-light">☀️</span>
           <span class="theme-icon-dark" style="display:none;">🌙</span>
         </button>

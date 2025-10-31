@@ -8,32 +8,48 @@
 <script>
 (function() {
   const themeToggle = document.getElementById('theme-toggle');
+  const themeToggleDesktop = document.getElementById('theme-toggle-desktop');
   const body = document.body;
-  const iconLight = document.querySelector('.theme-icon-light');
-  const iconDark = document.querySelector('.theme-icon-dark');
+  const iconLights = document.querySelectorAll('.theme-icon-light');
+  const iconDarks = document.querySelectorAll('.theme-icon-dark');
   
   // 从 localStorage 读取用户偏好
   const savedTheme = localStorage.getItem('theme');
   const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
   
+  // 更新所有图标
+  function updateIcons(isDark) {
+    iconLights.forEach(icon => {
+      icon.style.display = isDark ? 'none' : 'inline';
+    });
+    iconDarks.forEach(icon => {
+      icon.style.display = isDark ? 'inline' : 'none';
+    });
+  }
+  
   // 初始化主题
   if (savedTheme === 'dark' || (!savedTheme && prefersDark)) {
     body.classList.add('dark-mode');
-    iconLight.style.display = 'none';
-    iconDark.style.display = 'inline';
+    updateIcons(true);
   }
   
-  // 切换主题
-  themeToggle.addEventListener('click', () => {
+  // 切换主题函数
+  function toggleTheme() {
     body.classList.toggle('dark-mode');
     const isDark = body.classList.contains('dark-mode');
-    
-    iconLight.style.display = isDark ? 'none' : 'inline';
-    iconDark.style.display = isDark ? 'inline' : 'none';
-    
-    // 保存用户偏好
+    updateIcons(isDark);
     localStorage.setItem('theme', isDark ? 'dark' : 'light');
-  });
+  }
+  
+  // 绑定移动端按钮
+  if (themeToggle) {
+    themeToggle.addEventListener('click', toggleTheme);
+  }
+  
+  // 绑定桌面端按钮
+  if (themeToggleDesktop) {
+    themeToggleDesktop.addEventListener('click', toggleTheme);
+  }
   
   // 移动端菜单切换
   const menuToggle = document.getElementById('menu-toggle');

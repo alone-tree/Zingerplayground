@@ -140,6 +140,7 @@ img {
   background-color: var(--bg-color);
   border-bottom: 1px solid var(--border-color);
   position: relative;
+  z-index: 100;
   transition: background-color var(--transition);
 }
 
@@ -194,9 +195,10 @@ img {
   border-radius: 4px;
   box-shadow: 0 4px 8px var(--shadow-color);
   min-width: 150px;
-  padding: var(--spacing-xs) 0;
-  margin-top: var(--spacing-xs);
+  padding: var(--spacing-sm) 0;
+  margin-top: 0;
   list-style: none;
+  z-index: 10;
 }
 
 .nav-item:hover .dropdown-menu {
@@ -226,9 +228,15 @@ img {
   color: var(--link-color);
 }
 
+/* 移动端控制按钮组 */
+.mobile-controls {
+  display: none;
+  gap: var(--spacing-sm);
+  align-items: center;
+}
+
 /* 移动端汉堡菜单 */
 .menu-toggle {
-  display: none;
   background: none;
   border: none;
   font-size: 1.5rem;
@@ -301,12 +309,18 @@ img {
     display: inline;
   }
   
-  .nav-menu {
-    display: none;
+  /* 移动端显示控制按钮组 */
+  .mobile-controls {
+    display: flex;
   }
   
-  .menu-toggle {
-    display: block;
+  /* 移动端隐藏桌面端菜单项 */
+  .nav-item-desktop {
+    display: none !important;
+  }
+  
+  .nav-menu {
+    display: none;
   }
   
   /* 移动端菜单展开样式 */
@@ -334,5 +348,15 @@ img {
 @media (min-width: 769px) {
   .site-logo .logo-short {
     display: none;
+  }
+  
+  /* 桌面端隐藏移动端控制按钮组 */
+  .mobile-controls {
+    display: none !important;
+  }
+  
+  /* 桌面端隐藏移动端菜单项 */
+  .nav-item-mobile {
+    display: none !important;
   }
 }
