@@ -12,50 +12,8 @@
       {{ .Content }}
     </div>
     
-    <!-- 小说元信息（底部） -->
+    <!-- 导航链接 -->
     <footer class="novel-footer">
-      <div class="novel-meta-bottom">
-        {{ if .Params.novel }}
-          <div class="meta-item">
-            <strong>所属小说：</strong>{{ .Params.novel }}
-          </div>
-        {{ end }}
-        
-        {{ if .Date }}
-          <div class="meta-item">
-            <strong>发布时间：</strong>{{ .Date.Format "2006年01月02日" }}
-          </div>
-        {{ end }}
-        
-        {{ if .Lastmod }}
-          <div class="meta-item">
-            <strong>更新时间：</strong>{{ .Lastmod.Format "2006年01月02日" }}
-          </div>
-        {{ end }}
-        
-        {{ if .WordCount }}
-          <div class="meta-item">
-            <strong>字数：</strong>{{ .WordCount }} 字
-          </div>
-        {{ end }}
-        
-        {{ if .ReadingTime }}
-          <div class="meta-item">
-            <strong>阅读时间：</strong>约 {{ .ReadingTime }} 分钟
-          </div>
-        {{ end }}
-        
-        {{ if .Params.tags }}
-          <div class="meta-item">
-            <strong>标签：</strong>
-            {{ range .Params.tags }}
-              <a href="/tags/{{ . | urlize }}" class="tag">{{ . }}</a>
-            {{ end }}
-          </div>
-        {{ end }}
-      </div>
-      
-      <!-- 导航链接 -->
       <div class="novel-navigation">
         {{ with .PrevInSection }}
           <a href="{{ .RelPermalink }}" class="nav-link nav-prev">
@@ -123,27 +81,7 @@
 .novel-footer {
   border-top: 2px solid var(--border-color);
   padding-top: var(--spacing-lg);
-}
-
-.novel-meta-bottom {
-  display: flex;
-  flex-direction: column;
-  gap: var(--spacing-sm);
-  margin-bottom: var(--spacing-lg);
-  padding: var(--spacing-md);
-  background-color: var(--bg-secondary);
-  border-radius: 8px;
-  font-size: 0.95rem;
-}
-
-.meta-item {
-  display: flex;
-  gap: var(--spacing-xs);
-}
-
-.meta-item strong {
-  font-weight: 600;
-  min-width: 80px;
+  margin-top: var(--spacing-xl);
 }
 
 .novel-navigation {

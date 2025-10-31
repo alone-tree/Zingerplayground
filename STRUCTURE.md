@@ -1,4 +1,4 @@
-# 网站目录结构说明（已更新）
+# 网站目录结构说明
 
 ## 内容组织
 
@@ -7,14 +7,13 @@
 ```
 content/novels/
 ├── _index.md                    # 小说板块首页
-├── starlight.md                 # 短篇小说 1（直接放在 novels/ 下）
-├── another-story.md             # 短篇小说 2
+├── starlight.md                 # 短篇小说（直接放在 novels/ 下）
 └── [中长篇小说名]/              # 每部中长篇一个文件夹
-    ├── index.md                # 小说简介 + 章节列表
-    ├── chapter-01/
-    │   └── index.md            # 第一章内容
+    ├── _index.md                # 小说简介（必须带下划线）
+    ├── chapter-01/              # 章节文件夹（名称可自定义）
+    │   └── index.md            # 章节内容（必须是 index.md）
     ├── chapter-02/
-    │   └── index.md            # 第二章内容
+    │   └── index.md
     └── ...
 ```
 
@@ -22,97 +21,41 @@ content/novels/
 
 ### 短篇小说
 - **位置**：直接放在 `content/novels/` 目录下
-- **格式**：单个 `.md` 文件
-- **命名**：`小说名.md` 或 `story-name.md`
+- **格式**：单个 `.md` 文件（推荐，也支持 `.html`）
+- **命名**：`story-name.md`（建议用英文和连字符）
 
 ### 中长篇小说
 - **位置**：在 `content/novels/` 下创建独立文件夹
-- **格式**：Page Bundle（文件夹 + index.md）
-- **命名**：`小说名/` 文件夹，里面包含 `index.md` 和各章节文件夹
+- **格式**：Page Bundle（文件夹 + _index.md）
+- **命名规则**：
+  - 小说文件夹：`novel-name/`（建议用英文和连字符）
+  - 小说简介：必须是 `_index.md`（带下划线）
+  - 章节文件夹：可自定义（如 `chapter-01/` 或 `01-chapter-name/`）
+  - 章节文件：必须是 `index.md`（不带下划线）
 
-## 添加新内容
-
-### 添加短篇小说
-
-创建文件：`content/novels/your-story.md`
-
-```yaml
----
-title: "你的短篇标题"
-date: 2025-10-30
-draft: false
-tags: ["科幻", "人文"]
-category: "短篇"
-description: "简短描述"
-cover: ""  # 可选：封面图路径
----
-
-正文内容...
-```
-
-### 添加中长篇小说
-
-1. 创建小说文件夹：`content/novels/your-novel/`
-
-2. 创建小说简介：`content/novels/your-novel/index.md`
-```yaml
----
-title: "你的小说名"
-date: 2025-10-30
-draft: false
-tags: ["科幻"]
-category: "中长篇"
-description: "小说简介"
----
-
-## 作品简介
-...
-```
-
-3. 创建章节：`content/novels/your-novel/chapter-01/index.md`
-```yaml
----
-title: "第一章：章节名"
-novel: "你的小说名"
-chapter: 1
-date: 2025-10-30
-draft: false
-tags: ["科幻"]
-category: "中长篇"
----
-
-章节内容...
-```
+> **Hugo Page Bundle 说明**：
+> - `_index.md`（带下划线）= Branch Bundle，可以有子页面
+> - `index.md`（不带下划线）= Leaf Bundle，是最终页面
 
 ## 页面访问路径
 
-- 小说总列表：`/novels/`
-- 单篇短篇：`/novels/starlight/`（直接阅读）
-- 中长篇简介：`/novels/time-traveler/`（章节列表）
-- 中长篇章节：`/novels/time-traveler/chapter-01/`（阅读章节）
+| 页面类型 | URL 路径 | 说明 |
+|---------|---------|------|
+| 小说总列表 | `/novels/` | 显示所有小说卡片 |
+| 短篇小说 | `/novels/starlight/` | 直接阅读全文 |
+| 中长篇简介 | `/novels/time-traveler/` | 显示章节列表 |
+| 中长篇章节 | `/novels/time-traveler/chapter-01/` | 阅读具体章节 |
 
-## Front Matter 字段说明
+## 短篇 vs 中长篇
 
-### 短篇小说
-- `title`: 标题
-- `date`: 发布日期
-- `draft`: 是否草稿（true/false）
-- `tags`: 标签数组
-- `category`: **必须是 "短篇"**
-- `description`: 简介
-- `cover`: 封面图（可选）
-
-### 中长篇小说（index.md）
-- `title`: 小说名称
-- `category`: **必须是 "中长篇"**
-- 其他字段同短篇
-
-### 中长篇章节
-- `title`: 章节标题
-- `novel`: 所属小说名称
-- `chapter`: 章节号（用于排序）
-- `category`: **必须是 "中长篇"**
-- 其他字段同短篇
+| 特性 | 短篇 | 中长篇 |
+|------|------|--------|
+| 文件结构 | 单个 `.md` 文件 | 文件夹 + `_index.md` |
+| 存放位置 | `novels/` 下 | `novels/小说名/` 下 |
+| 点击卡片 | 直接阅读全文 | 跳转到章节列表 |
+| `category` | "短篇" | "中长篇" |
+| `layout` | 不需要 | 必须是 "list" |
+| 章节 | 无 | 多个章节文件夹 |
 
 ## 图片资源
 
@@ -127,18 +70,6 @@ static/images/
         └── cover.jpg
 ```
 
-## 区别说明
-
-### 短篇 vs 中长篇
-
-| 特性 | 短篇 | 中长篇 |
-|------|------|--------|
-| 文件结构 | 单个 `.md` 文件 | 文件夹 + `index.md` |
-| 存放位置 | `novels/` 下 | `novels/小说名/` 下 |
-| 点击卡片 | 直接阅读全文 | 跳转到章节列表 |
-| `category` | "短篇" | "中长篇" |
-| 章节 | 无 | 多个章节文件夹 |
-
 ## 示例
 
 ### 当前结构
@@ -147,14 +78,14 @@ content/novels/
 ├── _index.md                 # 小说首页
 ├── starlight.md             # ✓ 短篇
 └── time-traveler/           # ✓ 中长篇
-    ├── index.md            # 小说简介
+    ├── _index.md            # 小说简介（带下划线）
     ├── chapter-01/
-    │   └── index.md        # 第一章
+    │   └── index.md        # 第一章（不带下划线）
     └── chapter-02/
-        └── index.md        # 第二章
+        └── index.md        # 第二章（不带下划线）
 ```
 
-### 添加更多内容后
+### 扩展后的结构
 ```
 content/novels/
 ├── _index.md
@@ -162,8 +93,24 @@ content/novels/
 ├── the-last-star.md         # 短篇 2
 ├── dream-catcher.md         # 短篇 3
 ├── time-traveler/           # 中长篇 1
+│   ├── _index.md
+│   ├── chapter-01/
+│   └── chapter-02/
 └── parallel-world/          # 中长篇 2
-    ├── index.md
+    ├── _index.md
     ├── chapter-01/
     └── chapter-02/
 ```
+
+## 章节排序说明
+
+章节在页面上的显示顺序由 Front Matter 中的 `chapter` 参数决定，与文件夹名称无关。
+
+**示例：**
+- `chapter-01/index.md` 中 `chapter: 1`
+- `chapter-02/index.md` 中 `chapter: 2`
+- 页面会按照 1, 2, 3... 的顺序显示
+
+## 相关文档
+
+- [内容模板和添加指南](./TEMPLATES.md)

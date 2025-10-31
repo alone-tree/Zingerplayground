@@ -17,7 +17,18 @@
         <article class="novel-card" data-category="{{ .Params.category }}">
           {{ if .Params.cover }}
             <div class="novel-cover">
-              <img src="{{ .Params.cover }}" alt="{{ .Title }}" loading="lazy" />
+              {{ $coverPath := "" }}
+              {{ if .Resources }}
+                {{ $cover := .Resources.GetMatch .Params.cover }}
+                {{ if $cover }}
+                  {{ $coverPath = $cover.RelPermalink }}
+                {{ else }}
+                  {{ $coverPath = .Params.cover }}
+                {{ end }}
+              {{ else }}
+                {{ $coverPath = .Params.cover }}
+              {{ end }}
+              <img src="{{ $coverPath }}" alt="{{ .Title }}" loading="lazy" />
             </div>
           {{ else }}
             <div class="novel-cover novel-cover-default">
