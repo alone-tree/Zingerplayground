@@ -2,7 +2,7 @@
 title: "林思"
 novel: "完美伴侣"
 chapter: 4
-date: 2025-10-31
+date: 2025-10-04
 draft: false
 tags: ["科幻", "人工智能"]
 category: "中长篇"

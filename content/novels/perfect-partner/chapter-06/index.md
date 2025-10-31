@@ -2,7 +2,7 @@
 title: "马俊杰"
 novel: "完美伴侣"
 chapter: 6
-date: 2025-10-31
+date: 2025-10-06
 draft: false
 tags: ["科幻", "人工智能"]
 category: "中长篇"

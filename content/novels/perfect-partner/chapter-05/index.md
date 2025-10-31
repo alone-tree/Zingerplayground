@@ -2,7 +2,7 @@
 title: "张翠花"
 novel: "完美伴侣"
 chapter: 5
-date: 2025-10-31
+date: 2025-10-05
 draft: false
 tags: ["科幻", "人工智能"]
 category: "中长篇"
