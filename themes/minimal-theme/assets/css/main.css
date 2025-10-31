@@ -319,8 +319,10 @@ img {
     width: 100%;
     background-color: var(--bg-color);
     border-bottom: 1px solid var(--border-color);
+    box-shadow: 0 4px 12px var(--shadow-color);
     padding: var(--spacing-sm);
     gap: 0;
+    z-index: 1000;
   }
   
   .hero {
