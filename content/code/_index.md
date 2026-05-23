@@ -1,6 +1,7 @@
 ---
 title: "代码"
-description: "技术分享与代码片段"
-layout: "under-construction"
+date: 2025-11-01
+draft: false
 ---
 
+一些自己做的和参与的工具。
