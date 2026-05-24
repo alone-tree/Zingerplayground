@@ -1,0 +1,140 @@
+{{ define "title" }}{{ .Title }} | {{ .Site.Title }}{{ end }}
+{{ define "main" }}
+<div class="container">
+  <section class="photo-page">
+    <h1>{{ .Title }}</h1>
+    
+    {{ if .Content }}
+      <div class="photo-intro container-narrow">
+        {{ .Content }}
+      </div>
+    {{ end }}
+    
+    <div class="photo-grid">
+      {{ range .Pages }}
+        <article class="photo-card">
+          <a href="{{ .RelPermalink }}" class="photo-cover-link">
+            {{ if .Params.cover }}
+              <div class="photo-cover">
+                <img src="{{ .Params.cover }}" alt="{{ .Title }}" loading="lazy" />
+              </div>
+            {{ else }}
+              <div class="photo-cover photo-cover-placeholder">
+                <span class="photo-placeholder-icon">📷</span>
+              </div>
+            {{ end }}
+          </a>
+          <div class="photo-info">
+            <h2><a href="{{ .RelPermalink }}">{{ .Title }}</a></h2>
+            {{ if .Params.description }}
+              <p class="photo-description">{{ .Params.description }}</p>
+            {{ end }}
+          </div>
+        </article>
+      {{ end }}
+    </div>
+  </section>
+</div>
+
+<style>
+.photo-page {
+  padding: 3rem 0;
+}
+
+.photo-page h1 {
+  font-size: 2.5rem;
+  margin-bottom: 2rem;
+  text-align: center;
+}
+
+.photo-intro {
+  margin-bottom: 3rem;
+  font-size: 1rem;
+  line-height: 1.8;
+  color: var(--text-color);
+  opacity: 0.85;
+}
+
+.photo-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+  gap: 2rem;
+}
+
+.photo-card {
+  background-color: var(--bg-secondary);
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px var(--shadow-color);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.photo-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 4px 16px var(--shadow-color);
+}
+
+.photo-cover {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  background-color: var(--bg-secondary);
+}
+
+.photo-cover img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.4s ease;
+}
+
+.photo-card:hover .photo-cover img {
+  transform: scale(1.05);
+}
+
+.photo-cover-placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, var(--bg-secondary), var(--border-color));
+}
+
+.photo-placeholder-icon {
+  font-size: 3rem;
+  opacity: 0.5;
+}
+
+.photo-info {
+  padding: 1.25rem;
+}
+
+.photo-info h2 {
+  font-size: 1.2rem;
+  margin-bottom: 0.5rem;
+  line-height: 1.4;
+}
+
+.photo-info h2 a {
+  color: var(--text-color);
+}
+
+.photo-info h2 a:hover {
+  color: var(--link-color);
+}
+
+.photo-description {
+  font-size: 0.9rem;
+  line-height: 1.6;
+  opacity: 0.8;
+}
+
+@media (max-width: 768px) {
+  .photo-grid {
+    grid-template-columns: 1fr;
+  }
+  .photo-page h1 {
+    font-size: 2rem;
+  }
+}
+</style>
+{{ end }}

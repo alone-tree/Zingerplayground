@@ -1,0 +1,89 @@
+{{ define "title" }}{{ .Title }} | {{ .Site.Title }}{{ end }}
+{{ define "main" }}
+<div class="about-page">
+  <div class="container-narrow">
+    <header class="about-header">
+      <h1>{{ .Title }}</h1>
+    </header>
+    
+    <div class="about-content">
+      {{ .Content }}
+    </div>
+  </div>
+</div>
+
+<style>
+.about-page {
+  padding: var(--spacing-xl) 0;
+}
+
+.about-header {
+  text-align: center;
+  margin-bottom: var(--spacing-xl);
+  padding-bottom: var(--spacing-md);
+  border-bottom: 2px solid var(--border-color);
+}
+
+.about-header h1 {
+  font-size: 2.5rem;
+  color: var(--text-color);
+}
+
+.about-content {
+  font-size: 1.05rem;
+  line-height: 1.9;
+  color: var(--text-color);
+}
+
+.about-content p {
+  margin-bottom: var(--spacing-md);
+}
+
+.about-content h2 {
+  font-size: 1.5rem;
+  margin-top: var(--spacing-lg);
+  margin-bottom: var(--spacing-sm);
+  color: var(--link-color);
+}
+
+.about-content h3 {
+  font-size: 1.2rem;
+  margin-top: var(--spacing-md);
+  margin-bottom: var(--spacing-sm);
+  font-weight: 600;
+}
+
+.about-content a {
+  color: var(--link-color);
+  border-bottom: 1px solid transparent;
+  transition: border-color var(--transition);
+}
+
+.about-content a:hover {
+  border-bottom-color: var(--link-color);
+}
+
+.about-content ul, .about-content ol {
+  margin: var(--spacing-sm) 0 var(--spacing-md) 1.5em;
+}
+
+.about-content li {
+  margin-bottom: 0.5em;
+}
+
+.about-content hr {
+  border: none;
+  border-top: 1px solid var(--border-color);
+  margin: var(--spacing-lg) 0;
+}
+
+@media (max-width: 768px) {
+  .about-header h1 {
+    font-size: 2rem;
+  }
+  .about-content {
+    font-size: 1rem;
+  }
+}
+</style>
+{{ end }}

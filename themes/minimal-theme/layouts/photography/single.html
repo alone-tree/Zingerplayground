@@ -1,0 +1,100 @@
+{{ define "title" }}{{ .Title }} | {{ .Site.Title }}{{ end }}
+{{ define "main" }}
+<article class="photo-single">
+  <div class="container-narrow">
+    <header class="photo-header">
+      <h1>{{ .Title }}</h1>
+      {{ if .Params.description }}
+        <p class="photo-subtitle">{{ .Params.description }}</p>
+      {{ end }}
+    </header>
+    
+    <div class="photo-gallery">
+      {{ .Content }}
+    </div>
+    
+    <footer class="photo-footer">
+      <div class="back-link">
+        <a href="/photography/">← 返回摄影列表</a>
+      </div>
+    </footer>
+  </div>
+</article>
+
+<style>
+.photo-single {
+  padding: var(--spacing-lg) 0;
+}
+
+.photo-header {
+  text-align: center;
+  margin-bottom: var(--spacing-lg);
+  padding-bottom: var(--spacing-md);
+  border-bottom: 2px solid var(--border-color);
+}
+
+.photo-header h1 {
+  font-size: 2.2rem;
+  margin-bottom: var(--spacing-sm);
+  line-height: 1.3;
+}
+
+.photo-subtitle {
+  font-size: 1.1rem;
+  color: var(--text-color);
+  opacity: 0.7;
+  line-height: 1.6;
+}
+
+.photo-gallery {
+  margin-bottom: var(--spacing-xl);
+}
+
+.photo-gallery p {
+  margin-bottom: var(--spacing-md);
+  line-height: 1.8;
+}
+
+.photo-gallery img {
+  width: 100%;
+  height: auto;
+  border-radius: 4px;
+  margin: var(--spacing-sm) 0 var(--spacing-md);
+  box-shadow: 0 2px 8px var(--shadow-color);
+}
+
+.photo-gallery figure {
+  margin: var(--spacing-md) 0;
+  text-align: center;
+}
+
+.photo-gallery figcaption {
+  margin-top: var(--spacing-xs);
+  font-size: 0.9rem;
+  color: var(--text-color);
+  opacity: 0.7;
+}
+
+.photo-footer {
+  border-top: 2px solid var(--border-color);
+  padding-top: var(--spacing-lg);
+  margin-top: var(--spacing-xl);
+  text-align: center;
+}
+
+.back-link a {
+  color: var(--link-color);
+  font-size: 0.95rem;
+}
+
+.back-link a:hover {
+  color: var(--link-hover);
+}
+
+@media (max-width: 768px) {
+  .photo-header h1 {
+    font-size: 1.75rem;
+  }
+}
+</style>
+{{ end }}

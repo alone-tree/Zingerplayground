@@ -1,0 +1,120 @@
+{{ define "title" }}{{ .Title }} | {{ .Site.Title }}{{ end }}
+{{ define "main" }}
+<div class="container">
+  <section class="code-page">
+    <h1>{{ .Title }}</h1>
+    
+    <div class="code-grid">
+      {{ range .Pages }}
+        <article class="code-card">
+          <div class="code-card-header">
+            <span class="code-icon">{{ if in .Title "sisyphus" }}🔧{{ else if in .Title "bridge" }}🌉{{ else if in .Title "TextDrop" }}📱
+            {{ else }}💻{{ end }}</span>
+            <h2><a href="{{ .RelPermalink }}">{{ .Title }}</a></h2>
+          </div>
+          {{ if .Params.description }}
+            <p class="code-description">{{ .Params.description }}</p>
+          {{ else }}
+            <p class="code-description">{{ .Summary | truncate 120 }}</p>
+          {{ end }}
+          {{ if .Params.tags }}
+            <div class="code-tags">
+              {{ range .Params.tags }}
+                <span class="code-tag">{{ . }}</span>
+              {{ end }}
+            </div>
+          {{ end }}
+        </article>
+      {{ end }}
+    </div>
+  </section>
+</div>
+
+<style>
+.code-page {
+  padding: 3rem 0;
+}
+
+.code-page h1 {
+  font-size: 2.5rem;
+  margin-bottom: 2rem;
+  text-align: center;
+}
+
+.code-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+  gap: 2rem;
+}
+
+.code-card {
+  background-color: var(--bg-secondary);
+  border-radius: 8px;
+  padding: 1.5rem;
+  box-shadow: 0 2px 8px var(--shadow-color);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.code-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 4px 16px var(--shadow-color);
+}
+
+.code-card-header {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 0.75rem;
+}
+
+.code-icon {
+  font-size: 1.5rem;
+  flex-shrink: 0;
+}
+
+.code-card h2 {
+  font-size: 1.25rem;
+  margin-bottom: 0;
+  line-height: 1.4;
+}
+
+.code-card h2 a {
+  color: var(--text-color);
+}
+
+.code-card h2 a:hover {
+  color: var(--link-color);
+}
+
+.code-description {
+  font-size: 0.95rem;
+  line-height: 1.6;
+  margin-bottom: 1rem;
+  opacity: 0.8;
+}
+
+.code-tags {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.code-tag {
+  background-color: rgba(162, 123, 92, 0.15);
+  color: var(--link-color);
+  padding: 0.2rem 0.6rem;
+  border-radius: 4px;
+  font-size: 0.8rem;
+  font-family: var(--font-mono);
+}
+
+@media (max-width: 768px) {
+  .code-grid {
+    grid-template-columns: 1fr;
+  }
+  .code-page h1 {
+    font-size: 2rem;
+  }
+}
+</style>
+{{ end }}
