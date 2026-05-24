@@ -1,0 +1,218 @@
+{{ define "title" }}{{ .Title }} | {{ .Site.Title }}{{ end }}
+{{ define "main" }}
+<article class="article-single">
+  <div class="container-narrow">
+    <!-- 文章头部 -->
+    <header class="article-header">
+      <h1>{{ .Title }}</h1>
+      <div class="article-header-meta">
+        <span class="article-date">{{ .Date.Format "2006-01-02" }}</span>
+        {{ if .Params.category }}
+          <span class="article-category">{{ .Params.category }}</span>
+        {{ end }}
+      </div>
+      {{ if .Params.tags }}
+        <div class="article-tags">
+          {{ range .Params.tags }}
+            <span class="tag">{{ . }}</span>
+          {{ end }}
+        </div>
+      {{ end }}
+    </header>
+
+    <!-- 正文 -->
+    <div class="article-content">
+      {{ .Content }}
+    </div>
+
+    <!-- 底部导航 -->
+    <footer class="article-footer">
+      <div class="article-navigation">
+        {{ with .PrevInSection }}
+          <a href="{{ .RelPermalink }}" class="nav-link nav-prev">← {{ .Title }}</a>
+        {{ end }}
+        <a href="/articles/" class="nav-link nav-list">返回文章列表</a>
+        {{ with .NextInSection }}
+          <a href="{{ .RelPermalink }}" class="nav-link nav-next">{{ .Title }} →</a>
+        {{ end }}
+      </div>
+    </footer>
+  </div>
+</article>
+
+<style>
+.article-single {
+  padding: var(--spacing-lg) 0;
+}
+
+.article-header {
+  text-align: center;
+  margin-bottom: var(--spacing-lg);
+  padding-bottom: var(--spacing-md);
+  border-bottom: 2px solid var(--border-color);
+}
+
+.article-header h1 {
+  font-size: 2.2rem;
+  margin-bottom: var(--spacing-sm);
+  line-height: 1.3;
+}
+
+.article-header-meta {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  align-items: center;
+  margin-bottom: var(--spacing-sm);
+  font-size: 0.95rem;
+}
+
+.article-category {
+  background-color: var(--link-color);
+  color: white;
+  padding: 0.2rem 0.6rem;
+  border-radius: 4px;
+  font-size: 0.85rem;
+  font-weight: 500;
+}
+
+.article-date {
+  color: var(--text-color);
+  opacity: 0.6;
+}
+
+.article-tags {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.tag {
+  background-color: rgba(162, 123, 92, 0.15);
+  color: var(--link-color);
+  padding: 0.2rem 0.6rem;
+  border-radius: 4px;
+  font-size: 0.8rem;
+}
+
+.article-content {
+  font-family: var(--font-serif);
+  font-size: 17px;
+  line-height: 1.85;
+  color: var(--text-color);
+  margin-bottom: var(--spacing-xl);
+}
+
+.article-content p {
+  margin-bottom: 1.5em;
+  text-indent: 2em;
+}
+
+.article-content p:first-child {
+  text-indent: 0;
+}
+
+.article-content h2,
+.article-content h3,
+.article-content h4 {
+  font-family: var(--font-sans);
+  margin-top: var(--spacing-lg);
+  margin-bottom: var(--spacing-md);
+  text-indent: 0;
+}
+
+.article-content ul,
+.article-content ol {
+  margin-bottom: 1.5em;
+  padding-left: 2em;
+  text-indent: 0;
+}
+
+.article-content li {
+  margin-bottom: 0.5em;
+}
+
+.article-content blockquote {
+  border-left: 3px solid var(--link-color);
+  padding: 0.5em 1em;
+  margin: 1.5em 0;
+  background-color: var(--bg-secondary);
+  border-radius: 0 4px 4px 0;
+  text-indent: 0;
+}
+
+.article-content hr {
+  border: none;
+  border-top: 1px solid var(--border-color);
+  margin: var(--spacing-lg) 0;
+}
+
+.article-footer {
+  border-top: 2px solid var(--border-color);
+  padding-top: var(--spacing-lg);
+  margin-top: var(--spacing-xl);
+}
+
+.article-navigation {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--spacing-sm);
+  flex-wrap: wrap;
+}
+
+.nav-link {
+  flex: 1;
+  min-width: 100px;
+  padding: var(--spacing-sm) var(--spacing-md);
+  text-align: center;
+  border-radius: 4px;
+  transition: all var(--transition);
+  font-size: 0.95rem;
+  font-family: var(--font-sans);
+  text-decoration: none;
+}
+
+.nav-prev,
+.nav-list {
+  background-color: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  color: var(--text-color);
+}
+
+.nav-prev:hover,
+.nav-list:hover {
+  background-color: var(--border-color);
+}
+
+.nav-next {
+  background-color: var(--link-color);
+  color: white;
+  border: 1px solid var(--link-color);
+}
+
+.nav-next:hover {
+  background-color: var(--link-hover);
+  border-color: var(--link-hover);
+  color: white;
+}
+
+@media (max-width: 768px) {
+  .article-header h1 {
+    font-size: 1.8rem;
+  }
+
+  .article-content {
+    font-size: 16px;
+  }
+
+  .article-navigation {
+    flex-direction: column;
+  }
+
+  .nav-link {
+    min-width: auto;
+  }
+}
+</style>
+{{ end }}

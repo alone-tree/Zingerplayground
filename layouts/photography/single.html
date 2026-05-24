@@ -1,0 +1,145 @@
+{{ define "title" }}{{ .Title }} | {{ .Site.Title }}{{ end }}
+{{ define "main" }}
+<article class="photo-single">
+  <!-- 文字描述区 -->
+  <div class="container-narrow">
+    <header class="photo-header">
+      <h1>{{ .Title }}</h1>
+      <div class="photo-header-meta">
+        <span class="photo-date">{{ .Date.Format "2006-01-02" }}</span>
+        {{ if .Params.location }}
+          <span class="photo-location">{{ .Params.location }}</span>
+        {{ end }}
+      </div>
+      {{ if .Params.description }}
+        <p class="photo-header-desc">{{ .Params.description }}</p>
+      {{ end }}
+    </header>
+
+    {{ if .Content }}
+      <div class="photo-text">
+        {{ .Content }}
+      </div>
+    {{ end }}
+  </div>
+
+  <!-- 图片画廊 -->
+  {{ if .Params.images }}
+    <div class="photo-gallery">
+      {{ range .Params.images }}
+        <figure class="gallery-item">
+          <img src="{{ . }}" alt="{{ $.Title }}" loading="lazy" />
+        </figure>
+      {{ end }}
+    </div>
+  {{ end }}
+
+  <!-- 底部导航 -->
+  <div class="container-narrow">
+    <footer class="photo-footer">
+      <a href="/photography/" class="nav-link nav-list">← 返回摄影</a>
+    </footer>
+  </div>
+</article>
+
+<style>
+.photo-single {
+  padding: var(--spacing-lg) 0 var(--spacing-md);
+}
+
+.photo-header {
+  text-align: center;
+  margin-bottom: var(--spacing-md);
+  padding-bottom: var(--spacing-md);
+  border-bottom: 2px solid var(--border-color);
+}
+
+.photo-header h1 {
+  font-size: 2.2rem;
+  margin-bottom: var(--spacing-sm);
+  line-height: 1.3;
+}
+
+.photo-header-meta {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  font-size: 0.9rem;
+  color: var(--text-color);
+  opacity: 0.6;
+  margin-bottom: var(--spacing-sm);
+}
+
+.photo-header-desc {
+  font-size: 1.05rem;
+  opacity: 0.8;
+  max-width: 600px;
+  margin: 0 auto;
+  line-height: 1.7;
+}
+
+.photo-text {
+  font-family: var(--font-sans);
+  font-size: 16px;
+  line-height: 1.8;
+  margin-bottom: var(--spacing-lg);
+}
+
+/* 图片画廊 — 类 Masonry 两列 */
+.photo-gallery {
+  max-width: 1100px;
+  margin: 0 auto var(--spacing-xl);
+  padding: 0 var(--spacing-md);
+  columns: 2;
+  column-gap: 1rem;
+}
+
+.gallery-item {
+  break-inside: avoid;
+  margin-bottom: 1rem;
+  border-radius: 6px;
+  overflow: hidden;
+  background-color: var(--bg-secondary);
+}
+
+.gallery-item img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.photo-footer {
+  border-top: 2px solid var(--border-color);
+  padding-top: var(--spacing-lg);
+  text-align: center;
+}
+
+.nav-list {
+  display: inline-block;
+  padding: var(--spacing-sm) var(--spacing-lg);
+  background-color: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  color: var(--text-color);
+  border-radius: 4px;
+  transition: all var(--transition);
+  font-size: 0.95rem;
+  text-decoration: none;
+}
+
+.nav-list:hover {
+  background-color: var(--link-color);
+  border-color: var(--link-color);
+  color: white;
+}
+
+@media (max-width: 768px) {
+  .photo-header h1 {
+    font-size: 1.8rem;
+  }
+
+  .photo-gallery {
+    columns: 1;
+  }
+}
+</style>
+{{ end }}

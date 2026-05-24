@@ -1,0 +1,198 @@
+{{ define "title" }}{{ .Title }} | {{ .Site.Title }}{{ end }}
+{{ define "main" }}
+<div class="container">
+  <section class="articles-page">
+    <h1>{{ .Title }}</h1>
+
+    <!-- 分类筛选 -->
+    {{ $categories := slice }}
+    {{ range .Pages }}
+      {{ if .Params.category }}
+        {{ $categories = $categories | append .Params.category }}
+      {{ end }}
+    {{ end }}
+    {{ $categories = $categories | uniq }}
+    {{ if gt (len $categories) 1 }}
+    <div class="category-tabs">
+      <button class="tab-button active" data-category="all">全部</button>
+      {{ range $categories }}
+        <button class="tab-button" data-category="{{ . }}">{{ . }}</button>
+      {{ end }}
+    </div>
+    {{ end }}
+
+    <!-- 文章卡片网格 -->
+    <div class="articles-grid">
+      {{ range .Pages.ByDate.Reverse }}
+        <article class="article-card" data-category="{{ .Params.category }}">
+          <div class="article-card-body">
+            <h2><a href="{{ .RelPermalink }}">{{ .Title }}</a></h2>
+            {{ if .Params.description }}
+              <p class="article-description">{{ .Params.description }}</p>
+            {{ else }}
+              <p class="article-description">{{ .Summary | truncate 120 }}</p>
+            {{ end }}
+            <div class="article-meta">
+              {{ if .Params.category }}
+                <span class="article-category">{{ .Params.category }}</span>
+              {{ end }}
+              <span class="article-date">{{ .Date.Format "2006-01-02" }}</span>
+              {{ range .Params.tags }}
+                <span class="tag">{{ . }}</span>
+              {{ end }}
+            </div>
+          </div>
+        </article>
+      {{ end }}
+    </div>
+  </section>
+</div>
+
+<style>
+.articles-page {
+  padding: 3rem 0;
+}
+
+.articles-page h1 {
+  font-size: 2.5rem;
+  margin-bottom: 2rem;
+  text-align: center;
+}
+
+/* 分类筛选 — 复用小说板块样式 */
+.category-tabs {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-bottom: 3rem;
+}
+
+.tab-button {
+  padding: 0.5rem 1.25rem;
+  background-color: transparent;
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.95rem;
+  transition: all var(--transition);
+  color: var(--text-color);
+  font-family: var(--font-sans);
+}
+
+.tab-button:hover,
+.tab-button.active {
+  background-color: rgba(162, 123, 92, 0.2);
+  border-color: var(--link-color);
+  color: var(--link-color);
+}
+
+/* 卡片网格 */
+.articles-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 2rem;
+}
+
+.article-card {
+  background-color: var(--bg-secondary);
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px var(--shadow-color);
+  transition: transform var(--transition), box-shadow var(--transition);
+  display: flex;
+  flex-direction: column;
+}
+
+.article-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 4px 16px var(--shadow-color);
+}
+
+.article-card-body {
+  padding: 1.5rem;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.article-card-body h2 {
+  font-size: 1.3rem;
+  margin-bottom: 0.5rem;
+  line-height: 1.4;
+}
+
+.article-card-body h2 a {
+  color: var(--text-color);
+}
+
+.article-card-body h2 a:hover {
+  color: var(--link-color);
+}
+
+.article-description {
+  font-size: 0.95rem;
+  line-height: 1.6;
+  margin-bottom: 1rem;
+  opacity: 0.8;
+  flex: 1;
+}
+
+.article-meta {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  font-size: 0.85rem;
+  align-items: center;
+  margin-top: auto;
+}
+
+.article-category {
+  background-color: var(--link-color);
+  color: white;
+  padding: 0.2rem 0.6rem;
+  border-radius: 4px;
+  font-weight: 500;
+}
+
+.article-date {
+  color: var(--text-color);
+  opacity: 0.6;
+}
+
+.tag {
+  background-color: rgba(162, 123, 92, 0.15);
+  color: var(--link-color);
+  padding: 0.2rem 0.6rem;
+  border-radius: 4px;
+  font-size: 0.8rem;
+}
+
+@media (max-width: 768px) {
+  .articles-grid {
+    grid-template-columns: 1fr;
+  }
+}
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const tabs = document.querySelectorAll('.tab-button');
+  const cards = document.querySelectorAll('.article-card');
+
+  tabs.forEach(tab => {
+    tab.addEventListener('click', function() {
+      const category = this.dataset.category;
+      tabs.forEach(t => t.classList.remove('active'));
+      this.classList.add('active');
+      cards.forEach(card => {
+        if (category === 'all' || card.dataset.category === category) {
+          card.style.display = '';
+        } else {
+          card.style.display = 'none';
+        }
+      });
+    });
+  });
+});
+</script>
+{{ end }}
