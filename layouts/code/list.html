@@ -8,10 +8,7 @@
       {{ range .Pages }}
         <article class="code-card">
           <div class="code-card-body">
-            <h2>
-              <span class="code-icon">{ }</span>
-              <a href="{{ .RelPermalink }}">{{ .Title }}</a>
-            </h2>
+            <h2><a href="{{ .RelPermalink }}">{{ .Title }}</a></h2>
             {{ if .Params.description }}
               <p class="code-description">{{ .Params.description }}</p>
             {{ else }}
@@ -71,15 +68,6 @@
   align-items: flex-start;
   gap: 0.5rem;
 }
-
-.code-icon {
-  font-family: var(--font-mono);
-  color: var(--link-color);
-  font-weight: 700;
-  font-size: 1.1rem;
-  flex-shrink: 0;
-}
-
 .code-card-body h2 a {
   color: var(--text-color);
   line-height: 1.4;
