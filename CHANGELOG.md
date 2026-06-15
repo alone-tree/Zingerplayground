@@ -1,5 +1,14 @@
 # 变更日志
 
+## 2026-06-15 — AI 翻译+发布流程启动
+
+### 新增
+- 文章《如何看待现在 AI 的角色？》（content/articles/rethinking-ai-role.md）
+- 分类 "AI"（新增）
+- 封面图 static/images/articles/rethinking-ai-role-cover.png（21:9 横版）
+
+---
+
 ## 2026-05-24 — 样式改造
 
 ### 新增
