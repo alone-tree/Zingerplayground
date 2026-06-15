@@ -1,6 +1,6 @@
 ---
 title: "如何看待现在 AI 的角色？"
-date: 2026-06-14
+date: 2026-06-13
 draft: false
 tags: ["AI", "临时工", "Agent", "个性化模型"]
 category: "AI"
