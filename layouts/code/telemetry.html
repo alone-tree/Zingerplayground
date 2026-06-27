@@ -1,0 +1,431 @@
+{{ define "title" }}{{ .Title }} | {{ .Site.Title }}{{ end }}
+{{ define "main" }}
+<article class="telemetry-page">
+  <div class="container">
+    <header class="telemetry-header">
+      <h1>思源桥 · 遥测看板</h1>
+      <select id="daysSelect">
+        <option value="7">最近 7 天</option>
+        <option value="14">最近 14 天</option>
+        <option value="30" selected>最近 30 天</option>
+        <option value="90">最近 90 天</option>
+        <option value="365">最近一年</option>
+      </select>
+    </header>
+
+    <div class="telemetry-error" id="errorBanner" style="display:none;"></div>
+
+    <div class="telemetry-cards">
+      <div class="telemetry-card">
+        <div class="telemetry-card-label">活跃用户</div>
+        <div class="telemetry-card-value" id="vUsers">—</div>
+        <div class="telemetry-card-sub">独立匿名设备数</div>
+      </div>
+      <div class="telemetry-card">
+        <div class="telemetry-card-label">总调用次数</div>
+        <div class="telemetry-card-value" id="vCalls">—</div>
+        <div class="telemetry-card-sub" id="subCalls"></div>
+      </div>
+      <div class="telemetry-card">
+        <div class="telemetry-card-label">成功率</div>
+        <div class="telemetry-card-value" id="vRate">—</div>
+        <div class="telemetry-card-sub" id="subRate"></div>
+      </div>
+      <div class="telemetry-card">
+        <div class="telemetry-card-label">平均耗时</div>
+        <div class="telemetry-card-value" id="vDur">—</div>
+        <div class="telemetry-card-sub">毫秒 / 次</div>
+      </div>
+    </div>
+
+    <div class="telemetry-charts">
+      <div class="telemetry-panel">
+        <h3>每日调用量</h3>
+        <div><canvas id="chartCalls"></canvas></div>
+      </div>
+      <div class="telemetry-panel">
+        <h3>每日成功率</h3>
+        <div><canvas id="chartRate"></canvas></div>
+      </div>
+    </div>
+
+    <div class="telemetry-charts">
+      <div class="telemetry-panel">
+        <h3>各工具调用分布</h3>
+        <div><canvas id="chartToolCalls" style="max-height:280px;"></canvas></div>
+      </div>
+      <div class="telemetry-panel">
+        <h3>各工具成功率</h3>
+        <div><canvas id="chartToolRate" style="max-height:280px;"></canvas></div>
+      </div>
+    </div>
+
+    <div class="telemetry-charts">
+      <div class="telemetry-panel">
+        <h3>工具详情</h3>
+        <div id="toolTable"></div>
+      </div>
+      <div class="telemetry-panel">
+        <h3>失败类型 Top 20</h3>
+        <div id="errorTable"></div>
+      </div>
+    </div>
+
+    <div class="telemetry-footer">
+      数据来自 <code id="endpointDisplay">—</code> · 每 5 分钟自动刷新
+    </div>
+  </div>
+</article>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.8/dist/chart.umd.min.js"></script>
+<script>
+(function() {
+  var API_BASE = 'https://siyuanbridgetelemetry.zingerplayground.top';
+  document.getElementById('endpointDisplay').textContent = API_BASE;
+
+  var charts = {};
+
+  function destroyChart(key) {
+    if (charts[key]) { charts[key].destroy(); delete charts[key]; }
+  }
+
+  async function fetchDashboard(days) {
+    var res = await fetch(API_BASE + '/api/dashboard?days=' + days);
+    if (!res.ok) throw new Error('HTTP ' + res.status);
+    return res.json();
+  }
+
+  function renderSummary(data) {
+    var s = data.summary || {};
+    document.getElementById('vUsers').textContent = s.active_users != null ? s.active_users : '—';
+    document.getElementById('vCalls').textContent = (s.total_calls || 0).toLocaleString();
+    document.getElementById('vRate').textContent = s.success_rate != null ? s.success_rate + '%' : '—';
+    document.getElementById('vDur').textContent = s.avg_dur_ms != null ? s.avg_dur_ms + ' ms' : '—';
+    document.getElementById('subCalls').textContent = '近 ' + data.days + ' 天累计';
+    document.getElementById('subRate').textContent = data.days + ' 天窗口统计';
+  }
+
+  function chartColors() {
+    var style = getComputedStyle(document.body);
+    var tc = style.getPropertyValue('--text-color').trim();
+    var bc = style.getPropertyValue('--border-color').trim();
+    return {
+      warm: '#A27B5C',
+      warmAlpha: 'rgba(162,123,92,0.08)',
+      green: '#3F4E4F',
+      greenAlpha: 'rgba(63,78,79,0.06)',
+      grid: bc || 'rgba(127,127,127,0.12)',
+      tick: tc || '#555',
+    };
+  }
+
+  function renderDailyCalls(daily) {
+    destroyChart('calls');
+    if (!daily || daily.length === 0) return;
+    var c = chartColors();
+    var ctx = document.getElementById('chartCalls').getContext('2d');
+    charts.calls = new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels: daily.map(function(d) { return d.date; }),
+        datasets: [{
+          data: daily.map(function(d) { return d.calls; }),
+          borderColor: c.warm,
+          backgroundColor: c.warmAlpha,
+          fill: true,
+          tension: 0.3,
+          pointRadius: 2,
+          pointHoverRadius: 5,
+        }],
+      },
+      options: {
+        responsive: true,
+        plugins: { legend: { display: false } },
+        scales: {
+          x: { ticks: { font: { size: 10 }, color: c.tick }, grid: { color: c.grid } },
+          y: { beginAtZero: true, ticks: { font: { size: 10 }, color: c.tick }, grid: { color: c.grid } },
+        },
+      },
+    });
+  }
+
+  function renderDailyRate(daily) {
+    destroyChart('rate');
+    if (!daily || daily.length === 0) return;
+    var c = chartColors();
+    var ctx = document.getElementById('chartRate').getContext('2d');
+    charts.rate = new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels: daily.map(function(d) { return d.date; }),
+        datasets: [{
+          data: daily.map(function(d) { return d.success_rate; }),
+          borderColor: c.green,
+          backgroundColor: c.greenAlpha,
+          fill: true,
+          tension: 0.3,
+          pointRadius: 2,
+          pointHoverRadius: 5,
+        }],
+      },
+      options: {
+        responsive: true,
+        plugins: { legend: { display: false } },
+        scales: {
+          x: { ticks: { font: { size: 10 }, color: c.tick }, grid: { color: c.grid } },
+          y: { min: 0, max: 100, ticks: { font: { size: 10 }, color: c.tick, callback: function(v) { return v + '%'; } }, grid: { color: c.grid } },
+        },
+      },
+    });
+  }
+
+  function renderToolBar(byTool) {
+    destroyChart('toolCalls');
+    destroyChart('toolRate');
+    if (!byTool || byTool.length === 0) return;
+    var c = chartColors();
+
+    var ctx1 = document.getElementById('chartToolCalls').getContext('2d');
+    charts.toolCalls = new Chart(ctx1, {
+      type: 'bar',
+      data: {
+        labels: byTool.map(function(t) { return t.tool.replace('siyuan_',''); }),
+        datasets: [{
+          data: byTool.map(function(t) { return t.calls; }),
+          backgroundColor: c.warm,
+          borderRadius: 4,
+        }],
+      },
+      options: {
+        responsive: true,
+        plugins: { legend: { display: false } },
+        scales: {
+          x: { ticks: { font: { size: 10 }, color: c.tick }, grid: { display: false } },
+          y: { beginAtZero: true, ticks: { font: { size: 10 }, color: c.tick }, grid: { color: c.grid } },
+        },
+      },
+    });
+
+    var ctx2 = document.getElementById('chartToolRate').getContext('2d');
+    charts.toolRate = new Chart(ctx2, {
+      type: 'bar',
+      data: {
+        labels: byTool.map(function(t) { return t.tool.replace('siyuan_',''); }),
+        datasets: [{
+          data: byTool.map(function(t) { return t.success_rate; }),
+          backgroundColor: c.green,
+          borderRadius: 4,
+        }],
+      },
+      options: {
+        responsive: true,
+        plugins: { legend: { display: false } },
+        scales: {
+          x: { ticks: { font: { size: 10 }, color: c.tick }, grid: { display: false } },
+          y: { min: 0, max: 100, ticks: { font: { size: 10 }, color: c.tick, callback: function(v) { return v + '%'; } }, grid: { color: c.grid } },
+        },
+      },
+    });
+  }
+
+  function escapeHtml(s) {
+    return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+
+  function renderToolTable(byTool) {
+    var el = document.getElementById('toolTable');
+    if (!byTool || byTool.length === 0) { el.innerHTML = '<div class="telemetry-empty">暂无数据</div>'; return; }
+    var rows = '';
+    for (var i = 0; i < byTool.length; i++) {
+      var t = byTool[i];
+      rows += '<tr>' +
+        '<td><code>' + escapeHtml(t.tool) + '</code></td>' +
+        '<td>' + t.calls.toLocaleString() + '</td>' +
+        '<td>' + t.success_rate + '%</td>' +
+        '<td>' + (t.avg_dur_ms != null ? t.avg_dur_ms + ' ms' : '—') + '</td>' +
+        '</tr>';
+    }
+    el.innerHTML = '<table class="telemetry-table">' +
+      '<thead><tr><th>工具</th><th>调用次数</th><th>成功率</th><th>平均耗时</th></tr></thead>' +
+      '<tbody>' + rows + '</tbody></table>';
+  }
+
+  function renderErrorTable(byError) {
+    var el = document.getElementById('errorTable');
+    if (!byError || byError.length === 0) { el.innerHTML = '<div class="telemetry-empty">暂无错误记录</div>'; return; }
+    var rows = '';
+    for (var i = 0; i < byError.length; i++) {
+      var e = byError[i];
+      rows += '<tr>' +
+        '<td><code>' + escapeHtml(e.error_type) + '</code></td>' +
+        '<td>' + e.count.toLocaleString() + '</td>' +
+        '</tr>';
+    }
+    el.innerHTML = '<table class="telemetry-table">' +
+      '<thead><tr><th>错误类型</th><th>次数</th></tr></thead>' +
+      '<tbody>' + rows + '</tbody></table>';
+  }
+
+  async function load() {
+    var days = document.getElementById('daysSelect').value;
+    var banner = document.getElementById('errorBanner');
+    banner.style.display = 'none';
+    try {
+      var data = await fetchDashboard(days);
+      renderSummary(data);
+      renderDailyCalls(data.daily);
+      renderDailyRate(data.daily);
+      renderToolBar(data.by_tool);
+      renderToolTable(data.by_tool);
+      renderErrorTable(data.by_error);
+    } catch (e) {
+      banner.textContent = '无法加载遥测数据：' + e.message;
+      banner.style.display = 'block';
+    }
+  }
+
+  document.getElementById('daysSelect').addEventListener('change', load);
+  load();
+  setInterval(load, 300000);
+})();
+</script>
+
+<style>
+.telemetry-page {
+  padding: var(--spacing-lg) 0;
+}
+
+.telemetry-header {
+  text-align: center;
+  margin-bottom: var(--spacing-lg);
+  padding-bottom: var(--spacing-md);
+  border-bottom: 2px solid var(--border-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+.telemetry-header h1 {
+  font-size: 2rem;
+  margin: 0;
+  color: var(--text-color);
+}
+.telemetry-header select {
+  padding: 6px 12px;
+  border-radius: 6px;
+  border: 1px solid var(--border-color);
+  font-size: 13px;
+  background: var(--bg-color);
+  color: var(--text-color);
+  cursor: pointer;
+  font-family: var(--font-sans);
+}
+
+.telemetry-error {
+  background: rgba(192,57,43,0.08);
+  color: #c0392b;
+  padding: 10px 16px;
+  border-radius: 6px;
+  margin-bottom: 20px;
+  font-size: 13px;
+}
+
+.telemetry-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 14px;
+  margin-bottom: 28px;
+}
+.telemetry-card {
+  background: var(--bg-secondary);
+  border-radius: 8px;
+  padding: 16px 20px;
+  border-left: 3px solid var(--link-color);
+}
+.telemetry-card-label {
+  font-size: 12px;
+  color: var(--text-color);
+  opacity: 0.55;
+  margin-bottom: 6px;
+}
+.telemetry-card-value {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--text-color);
+}
+.telemetry-card-sub {
+  font-size: 11px;
+  color: var(--text-color);
+  opacity: 0.4;
+  margin-top: 3px;
+}
+
+.telemetry-charts {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px;
+  margin-bottom: 24px;
+}
+@media (max-width: 768px) { .telemetry-charts { grid-template-columns: 1fr; } }
+
+.telemetry-panel {
+  background: var(--bg-color);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  padding: 18px 20px;
+}
+.telemetry-panel h3 {
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 14px;
+  color: var(--text-color);
+}
+
+.telemetry-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+.telemetry-table th {
+  text-align: left;
+  padding: 7px 10px;
+  border-bottom: 2px solid var(--border-color);
+  color: var(--text-color);
+  opacity: 0.5;
+  font-weight: 600;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+.telemetry-table td {
+  padding: 7px 10px;
+  border-bottom: 1px solid var(--border-color);
+  color: var(--text-color);
+}
+.telemetry-table tr:hover td {
+  background: var(--bg-secondary);
+}
+.telemetry-table code {
+  font-family: var(--font-mono);
+  font-size: 0.9em;
+}
+
+.telemetry-empty {
+  text-align: center;
+  padding: 32px 0;
+  color: var(--text-color);
+  opacity: 0.4;
+  font-size: 14px;
+}
+
+.telemetry-footer {
+  text-align: center;
+  padding: 20px 0 8px;
+  font-size: 12px;
+  color: var(--text-color);
+  opacity: 0.4;
+}
+.telemetry-footer code { font-family: var(--font-mono); }
+</style>
+{{ end }}

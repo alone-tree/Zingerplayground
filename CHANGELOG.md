@@ -1,5 +1,12 @@
 # 变更日志
 
+## 2026-06-27 — 思源桥遥测看板上线
+
+### 新增
+- 遥测看板页面（content/code/siyuan-bridge-telemetry.md + layouts/code/telemetry.html）
+
+---
+
 ## 2026-06-15 — AI 翻译+发布流程启动
 
 ### 新增

@@ -4,6 +4,21 @@
 
 ---
 
+## 2026-06-27 — 思源桥遥测看板上线
+
+### 新增
+- 遥测看板页面：`content/code/siyuan-bridge-telemetry.md` + `layouts/code/telemetry.html`
+- 集成 Chart.js，展示思源桥 MCP 工具的公开遥测统计数据
+- URL: `/code/siyuan-bridge-telemetry/`
+- 数据来源：Cloudflare Worker `/api/dashboard` → D1 数据库
+- 统计：活跃用户、调用次数、成功率、平均耗时、每日趋势图、各工具分布、失败类型排名
+
+### 设计
+- 复用网站 CSS 变量和字体，深色/浅色模式自适应
+- 紧凑顶部横幅，无英文副标题，无装饰色标
+
+---
+
 ## 2026-06-15 — AI 翻译+发布流程启动
 
 ### 新增
