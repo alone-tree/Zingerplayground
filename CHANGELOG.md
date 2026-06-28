@@ -1,15 +1,17 @@
 # 变更日志
 
-## 2026-06-28 — 域名修正
+## 2026-06-28 — 文档更新 + 本地启动勘误
+
+### 变更
+- AGENTS.md：板块状态更新到最新（2026-06-28）、补充域名信息、新增分类筛选机制说明、补全做事约定（流程规范）
+- 本地开发一节重写：给出经验证的正确启动方式（background=true不加&、不加多余默认参数）、增加停止服务器命令、增加一键脚本的坑、增加浏览器验证方式
+- 常见错误速查：新增本地开发踩坑清单（pgrep 缺失、taskkill、background 规则等）
+- STRUCTURE.md：新增文章板块和代码板块目录结构、新增封面图路径说明、新增网站板块总览表
+- TEMPLATES.md：新增文章 front matter 模板（含 category/cover 字段）、新增封面图路径规范
 
 ### 修复
 - config.toml baseURL 从 `zingerplayground.netlify.app` 改为 `zingerplayground.top`
-- 主题 header.html logo 链接从 `{{ .Site.BaseURL }}` 改为固定 `href="/"`，以后域名变动不影响导航（极小改动，经确认）
-
-### 变更
-- AGENTS.md：板块状态更新到最新、补充域名信息、新增分类筛选机制说明、补全做事约定（流程规范）
-- STRUCTURE.md：新增文章板块和代码板块目录结构、新增封面图路径说明、新增网站板块总览表
-- TEMPLATES.md：新增文章 front matter 模板（含 category/cover 字段）、新增封面图路径规范
+- 主题 header.html logo 链接从 `{{ .Site.BaseURL }}` 改为固定 `href="/"`
 
 ---
 

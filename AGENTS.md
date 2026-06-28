@@ -75,19 +75,48 @@ zikeb 的主要写作在思源笔记中（笔记本："自己写的文章"78 篇
 
 ### 6. 本地开发
 
+**正确启动开发服务器（唯一推荐方式）：**
+
 ```bash
-# 安装依赖
-hugo mod get
+terminal(background=true) → cd /d/Github/Zingerplayground && hugo server -D
+```
 
-# 启动开发服务器
-hugo server --disableFastRender
-# 访问 http://localhost:1313
+- 必须 `background=true`，**不要加 `&`**（加 `&` 会让子 shell 立即退出，Hermes 以为进程结束了）
+- `-D` 包含草稿内容
 
-# 构建
+**验证服务是否启动：**
+
+```bash
+curl -s -o /dev/null -w "%{http_code}" http://127.0.0.1:1313/
+# 期望: 200
+```
+
+**停止开发服务器：**
+
+```bash
+powershell.exe -Command "Get-Process hugo -ErrorAction SilentlyContinue | Stop-Process -Force"
+```
+
+**一键脚本（有坑）：**
+项目中有 `restart-hugo.ps1` 和 `stop-hugo.ps1`，但 `restart-hugo.ps1` 的 `Start-Process` 没设 `-WorkingDirectory`，必须在 `D:\Github\Zingerplayground` 下运行：
+
+```bash
+cd /d/Github/Zingerplayground && powershell.exe -ExecutionPolicy Bypass -File restart-hugo.ps1
+```
+
+**浏览器验证：**
+- 截图验证（用户能看）：加载能力库「浏览器控制」MCP → `browser_navigate` → `browser_take_screenshot`
+- 直接看（用户可见）：`cmd /c start "" "http://127.0.0.1:1313/"`
+
+**构建：**
+
+```bash
 hugo --gc --minify
 ```
 
-注意：必须使用 Hugo Extended 版本。
+生成文件在 `public/` 目录。
+
+> ⚠️ Windows 经验：不要传 `--disableFastRender --bind 127.0.0.1 --port 1313` 等多余参数——这些都是 Hugo 默认值。命令越短越可靠。
 
 ### 7. 常见错误速查
 
@@ -109,3 +138,10 @@ hugo --gc --minify
 **Git 操作：**
 - commit 到本地即可，不要 push（网络可能不通）
 - 需要 push 时由 zikeb 手动操作
+
+**本地开发（不可重复的踩坑经验）：**
+- 启动服务器必须用 `background=true` 且**不加 `&`**，加了 `&` shell 立即退出
+- 不要传 `--disableFastRender --bind 127.0.0.1 --port 1313`——这些都是默认值，传了反而不稳定
+- `restart-hugo.ps1` 必须在 `D:\Github\Zingerplayground` 目录下运行，否则找不到 config
+- git-bash 没有 `pgrep`——查找进程用 `ps | grep hugo` 代替
+- 停进程用 `taskkill /F /IM hugo.exe`，不要用 kill（Windows 风格）
