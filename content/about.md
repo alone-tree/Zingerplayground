@@ -2,6 +2,7 @@
 title: "关于"
 date: 2025-11-01
 draft: false
+type: "about"
 ---
 
 ## 这个网站为什么存在
