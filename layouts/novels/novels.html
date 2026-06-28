@@ -1,0 +1,100 @@
+{{ define "title" }}{{ .Title }} | {{ .Site.Title }}{{ end }}
+{{ define "main" }}
+<div class="container">
+  <section class="section-page">
+    <h1>{{ .Title }}</h1>
+
+    <!-- 中长篇/短篇分类按钮 -->
+    <div class="category-tabs">
+      <button class="tab-button active" data-category="all">全部</button>
+      <button class="tab-button" data-category="中长篇">中长篇</button>
+      <button class="tab-button" data-category="短篇">短篇</button>
+    </div>
+
+    <!-- 小说列表 -->
+    <div class="list-grid">
+      {{ range .Pages }}
+        <article class="list-card" data-category="{{ .Params.category }}">
+          {{ if .Params.cover }}
+            <div class="novel-cover">
+              {{ $coverPath := "" }}
+              {{ if .Resources }}
+                {{ $cover := .Resources.GetMatch .Params.cover }}
+                {{ if $cover }}
+                  {{ $coverPath = $cover.RelPermalink }}
+                {{ else }}
+                  {{ $coverPath = .Params.cover }}
+                {{ end }}
+              {{ else }}
+                {{ $coverPath = .Params.cover }}
+              {{ end }}
+              <img src="{{ $coverPath }}" alt="{{ .Title }}" loading="lazy" />
+            </div>
+          {{ else }}
+            <div class="novel-cover novel-cover-default">
+              <img src="/images/default/novel-cover.jpg" alt="{{ .Title }}" loading="lazy" />
+            </div>
+          {{ end }}
+
+          <div class="list-card-body">
+            <h2><a href="{{ .RelPermalink }}">{{ .Title }}</a></h2>
+            {{ if .Params.description }}
+              <p class="list-card-desc">{{ .Params.description }}</p>
+            {{ else }}
+              <p class="list-card-desc">{{ .Summary }}</p>
+            {{ end }}
+
+            <div class="list-card-meta">
+              {{ if .Params.category }}
+                <span class="category-badge">{{ .Params.category }}</span>
+              {{ end }}
+              <span class="list-date">{{ .Lastmod.Format "2006-01-02" }}</span>
+              {{ if .Params.tags }}
+                {{ range first 2 .Params.tags }}
+                  <span class="tag">{{ . }}</span>
+                {{ end }}
+              {{ end }}
+            </div>
+          </div>
+        </article>
+      {{ end }}
+    </div>
+  </section>
+</div>
+
+<style>
+.novel-cover {
+  width: 100%;
+  aspect-ratio: 3 / 2;
+  overflow: hidden;
+  background-color: var(--border-color);
+}
+.novel-cover img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const tabs = document.querySelectorAll('.tab-button');
+  const cards = document.querySelectorAll('.list-card');
+
+  tabs.forEach(tab => {
+    tab.addEventListener('click', function() {
+      const category = this.dataset.category;
+      tabs.forEach(t => t.classList.remove('active'));
+      this.classList.add('active');
+      cards.forEach(card => {
+        if (category === 'all' || card.dataset.category === category) {
+          card.style.display = '';
+        } else {
+          card.style.display = 'none';
+        }
+      });
+    });
+  });
+});
+</script>
+{{ end }}
