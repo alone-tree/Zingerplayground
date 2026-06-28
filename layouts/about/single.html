@@ -1,104 +1,95 @@
 {{ define "title" }}{{ .Title }} | {{ .Site.Title }}{{ end }}
 {{ define "main" }}
-<article class="about-single">
-  <div class="container-narrow">
-    <header class="about-header">
-      <h1>{{ .Title }}</h1>
-    </header>
-
+<div class="container-narrow">
+  <article class="about-page">
+    <h1>{{ .Title }}</h1>
     <div class="about-content">
       {{ .Content }}
     </div>
 
-    <footer class="about-footer">
-      <a href="/" class="nav-link nav-list">← 回到首页</a>
-    </footer>
-  </div>
-</article>
+    <!-- 社交链接 -->
+    <div class="about-social">
+      <h2>其他的平台</h2>
+
+      <div class="social-item">
+        <span class="social-label">微信公众号：清醒杂货店</span>
+        <div class="social-qrcode">
+          <img src="/images/qrcode-wechat.jpg" alt="公众号二维码" loading="lazy" />
+        </div>
+      </div>
+
+      <div class="social-links">
+        <a href="https://www.reddit.com/user/Mountain_Ad8731/" class="social-link" target="_blank" rel="noopener">Reddit</a>
+        <a href="https://github.com/alone-tree" class="social-link" target="_blank" rel="noopener">GitHub</a>
+      </div>
+    </div>
+  </article>
+</div>
 
 <style>
-.about-single {
+.about-page {
   padding: var(--spacing-lg) 0;
 }
-
-.about-header {
+.about-page h1 {
   text-align: center;
   margin-bottom: var(--spacing-lg);
-  padding-bottom: var(--spacing-md);
-  border-bottom: 2px solid var(--border-color);
+  font-size: 2rem;
 }
-
-.about-header h1 {
-  font-size: 2.2rem;
-}
-
 .about-content {
   font-family: var(--font-sans);
-  font-size: 17px;
-  line-height: 1.85;
-  color: var(--text-color);
-  margin-bottom: var(--spacing-xl);
+  font-size: 1rem;
+  line-height: 1.8;
 }
-
 .about-content h2 {
-  font-size: 1.6rem;
+  font-size: 1.4rem;
   margin-top: var(--spacing-lg);
-  margin-bottom: var(--spacing-md);
-  padding-bottom: var(--spacing-xs);
-  border-bottom: 1px solid var(--border-color);
+  margin-bottom: var(--spacing-sm);
+}
+.about-content hr {
+  border: none;
+  border-top: 1px solid var(--border-color);
+  margin: var(--spacing-lg) 0;
 }
 
-.about-content p {
-  margin-bottom: 1.2em;
-}
-
-.about-content ul {
-  margin-bottom: 1.2em;
-  padding-left: 1.5em;
-}
-
-.about-content li {
-  margin-bottom: 0.5em;
-}
-
-.about-content a {
-  color: var(--link-color);
-  text-decoration: underline;
-  text-underline-offset: 2px;
-}
-
-.about-content a:hover {
-  color: var(--link-hover);
-}
-
-.about-footer {
-  border-top: 2px solid var(--border-color);
+/* 社交链接 */
+.about-social {
+  margin-top: var(--spacing-xl);
   padding-top: var(--spacing-lg);
-  text-align: center;
+  border-top: 1px solid var(--border-color);
 }
-
-.nav-list {
-  display: inline-block;
-  padding: var(--spacing-sm) var(--spacing-lg);
-  background-color: var(--bg-color);
-  border: 1px solid var(--border-color);
-  color: var(--text-color);
-  border-radius: 4px;
-  transition: all var(--transition);
+.about-social h2 {
+  font-size: 1.1rem;
+  margin-bottom: var(--spacing-md);
+}
+.social-item {
+  margin-bottom: var(--spacing-sm);
+}
+.social-label {
+  display: block;
+  margin-bottom: 0.5rem;
   font-size: 0.95rem;
+}
+.social-qrcode {
+  display: inline-block;
+}
+.social-qrcode img {
+  width: 120px;
+  height: auto;
+  border-radius: 4px;
+  border: 1px solid var(--border-color);
+}
+.social-links {
+  display: flex;
+  gap: 1.5rem;
+  margin-top: var(--spacing-sm);
+}
+.social-link {
+  font-size: 0.95rem;
+  color: var(--link-color);
   text-decoration: none;
 }
-
-.nav-list:hover {
-  background-color: var(--link-color);
-  border-color: var(--link-color);
-  color: white;
-}
-
-@media (max-width: 768px) {
-  .about-header h1 {
-    font-size: 1.8rem;
-  }
+.social-link:hover {
+  text-decoration: underline;
 }
 </style>
 {{ end }}
