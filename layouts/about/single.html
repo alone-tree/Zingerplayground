@@ -9,18 +9,13 @@
 
     <!-- 社交链接 -->
     <div class="about-social">
-      <h2>其他的平台</h2>
-
-      <div class="social-item">
-        <span class="social-label">微信公众号：清醒杂货店</span>
-        <div class="social-qrcode">
-          <img src="/images/qrcode-wechat.jpg" alt="公众号二维码" loading="lazy" />
+      <div class="about-social-inner">
+        <div class="social-block social-block-wechat">
+          <span class="social-label">微信公众号：清醒杂货店</span>
+          <img src="/images/qrcode-wechat.jpg" alt="公众号二维码" class="qrcode-img" loading="lazy" />
         </div>
-      </div>
-
-      <div class="social-links">
-        <a href="https://www.reddit.com/user/Mountain_Ad8731/" class="social-link" target="_blank" rel="noopener">Reddit</a>
-        <a href="https://github.com/alone-tree" class="social-link" target="_blank" rel="noopener">GitHub</a>
+        Reddit： <a href="https://www.reddit.com/user/Mountain_Ad8731/" class="social-link" target="_blank" rel="noopener">Mountain_Ad8731</a>
+        GitHub： <a href="https://github.com/alone-tree" class="social-link" target="_blank" rel="noopener">alone-tree</a>
       </div>
     </div>
   </article>
@@ -51,37 +46,29 @@
   margin: var(--spacing-lg) 0;
 }
 
-/* 社交链接 */
+/* 社交链接行 */
 .about-social {
   margin-top: var(--spacing-xl);
   padding-top: var(--spacing-lg);
   border-top: 1px solid var(--border-color);
 }
-.about-social h2 {
-  font-size: 1.1rem;
-  margin-bottom: var(--spacing-md);
+.about-social-inner {
+  display: flex;
+  gap: 2.5rem;
+  align-items: flex-start;
 }
-.social-item {
-  margin-bottom: var(--spacing-sm);
+.social-block {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+}
+.social-block-wechat {
+  align-items: flex-start;
 }
 .social-label {
-  display: block;
-  margin-bottom: 0.5rem;
-  font-size: 0.95rem;
-}
-.social-qrcode {
-  display: inline-block;
-}
-.social-qrcode img {
-  width: 120px;
-  height: auto;
-  border-radius: 4px;
-  border: 1px solid var(--border-color);
-}
-.social-links {
-  display: flex;
-  gap: 1.5rem;
-  margin-top: var(--spacing-sm);
+  font-size: 0.85rem;
+  color: var(--text-color);
 }
 .social-link {
   font-size: 0.95rem;
@@ -90,6 +77,12 @@
 }
 .social-link:hover {
   text-decoration: underline;
+}
+.qrcode-img {
+  width: 100px;
+  height: 100px;
+  border-radius: 4px;
+  border: 1px solid var(--border-color);
 }
 </style>
 {{ end }}
