@@ -55,21 +55,24 @@
   padding-top: var(--spacing-lg);
   border-top: 1px solid var(--border-color);
   display: flex;
-  gap: 3rem;
+  gap: 2rem;
+  flex-wrap: wrap;
 }
 .social-item {
   display: flex;
   flex-direction: column;
   gap: 0.4rem;
+  flex-shrink: 0;
 }
 .social-label {
   font-size: 0.9rem;
   color: var(--text-color);
   font-family: var(--font-sans);
+  white-space: nowrap;
 }
 .social-qrcode {
   width: 100px;
-  height: 100px;
+  height: auto;
   border-radius: 4px;
   border: 1px solid var(--border-color);
 }
@@ -81,6 +84,13 @@
 }
 .social-handle:hover {
   text-decoration: underline;
+}
+
+@media (max-width: 600px) {
+  .about-social {
+    flex-direction: column;
+    gap: 1rem;
+  }
 }
 </style>
 {{ end }}
