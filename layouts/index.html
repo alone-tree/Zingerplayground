@@ -1,15 +1,14 @@
 {{ define "title" }}{{ .Site.Title }}{{ end }}
 {{ define "main" }}
-<div class="container">
+<div class="container home">
 
   <!-- ===== 最新小说 ===== -->
   <section class="home-section">
     <div class="section-header">
       <h2>最新小说</h2>
-      <a href="/novels/" class="section-more">查看所有小说 →</a>
+      <a href="/novels/" class="section-more">查看全部 →</a>
     </div>
-    <div class="novels-list">
-      {{/* 按 date 倒序取每部小说的最新一章 */}}
+    <div class="novel-list">
       {{ $novels := where .Site.RegularPages "Section" "novels" }}
       {{ $novels = where $novels "Kind" "page" }}
       {{ $uniqueNovels := slice }}
@@ -24,223 +23,177 @@
       {{ end }}
       {{ range $uniqueNovels }}
         <article class="novel-item">
-          <h3><a href="{{ .RelPermalink }}">{{ .Params.novel | default .Title }}</a></h3>
-          <div class="novel-meta">
-            <span class="novel-chapter">
-              {{ if .Params.chapter }}第{{ .Params.chapter }}章: {{ end }}{{ .Title }}
-            </span>
-            <span class="novel-date">{{ .Date.Format "2006-01-02" }}</span>
-            {{ if .Params.tags }}
-              <span class="novel-tags">
-                {{ range .Params.tags }}
-                  <span class="tag">{{ . }}</span>
-                {{ end }}
-              </span>
-            {{ end }}
-          </div>
+          <span class="novel-title">
+            <a href="{{ .RelPermalink }}">{{ .Params.novel | default .Title }}</a>
+            {{ if .Params.chapter }}<span class="novel-chapter"> 第{{ .Params.chapter }}章</span>{{ end }}
+          </span>
+          <span class="novel-date">{{ .Date.Format "2006-01-02" }}</span>
         </article>
       {{ end }}
     </div>
   </section>
 
-  <!-- ===== AI与Coding ===== -->
+  <!-- ===== 文章分类板块 ===== -->
+  {{ $categories := slice "AI与Coding" "经济与投资" "自我觉察" "社会观察" }}
+  {{ range $categories }}
+  {{ $articles := where (where $.Site.RegularPages "Section" "articles") "Params.category" . }}
+  {{ if len $articles }}
   <section class="home-section">
     <div class="section-header">
-      <h2>AI与Coding</h2>
+      <h2>{{ . }}</h2>
       <a href="/articles/" class="section-more">查看全部 →</a>
     </div>
     <div class="article-list">
-      {{ $ai := where (where .Site.RegularPages "Section" "articles") "Params.category" "AI与Coding" }}
-      {{ range first 3 $ai.ByDate.Reverse }}
+      {{ range first 3 $articles.ByDate.Reverse }}
         <article class="article-item">
-          <h3><a href="{{ .RelPermalink }}">{{ .Title }}</a></h3>
-          <div class="article-meta">
-            <span class="article-date">{{ .Date.Format "2006-01-02" }}</span>
-            {{ if .Params.tags }}
-              <span class="article-tags">
-                {{ range .Params.tags }}
-                  <span class="tag">{{ . }}</span>
-                {{ end }}
-              </span>
-            {{ end }}
-          </div>
+          <span class="article-title"><a href="{{ .RelPermalink }}">{{ .Title }}</a></span>
+          <span class="article-date">{{ .Date.Format "2006-01-02" }}</span>
         </article>
       {{ end }}
     </div>
   </section>
-
-  <!-- ===== 投资 ===== -->
-  <section class="home-section">
-    <div class="section-header">
-      <h2>投资</h2>
-      <a href="/articles/" class="section-more">查看全部 →</a>
-    </div>
-    <div class="article-list">
-      {{ $invest := where (where .Site.RegularPages "Section" "articles") "Params.category" "投资" }}
-      {{ range first 3 $invest.ByDate.Reverse }}
-        <article class="article-item">
-          <h3><a href="{{ .RelPermalink }}">{{ .Title }}</a></h3>
-          <div class="article-meta">
-            <span class="article-date">{{ .Date.Format "2006-01-02" }}</span>
-            {{ if .Params.tags }}
-              <span class="article-tags">
-                {{ range .Params.tags }}
-                  <span class="tag">{{ . }}</span>
-                {{ end }}
-              </span>
-            {{ end }}
-          </div>
-        </article>
-      {{ end }}
-    </div>
-  </section>
-
-  <!-- ===== 自我觉察 ===== -->
-  <section class="home-section">
-    <div class="section-header">
-      <h2>自我觉察</h2>
-      <a href="/articles/" class="section-more">查看全部 →</a>
-    </div>
-    <div class="article-list">
-      {{ $self := where (where .Site.RegularPages "Section" "articles") "Params.category" "自我觉察" }}
-      {{ range first 3 $self.ByDate.Reverse }}
-        <article class="article-item">
-          <h3><a href="{{ .RelPermalink }}">{{ .Title }}</a></h3>
-          <div class="article-meta">
-            <span class="article-date">{{ .Date.Format "2006-01-02" }}</span>
-            {{ if .Params.tags }}
-              <span class="article-tags">
-                {{ range .Params.tags }}
-                  <span class="tag">{{ . }}</span>
-                {{ end }}
-              </span>
-            {{ end }}
-          </div>
-        </article>
-      {{ end }}
-    </div>
-  </section>
-
-  <!-- ===== 社会观察 ===== -->
-  <section class="home-section">
-    <div class="section-header">
-      <h2>社会观察</h2>
-      <a href="/articles/" class="section-more">查看全部 →</a>
-    </div>
-    <div class="article-list">
-      {{ $society := where (where .Site.RegularPages "Section" "articles") "Params.category" "社会观察" }}
-      {{ range first 3 $society.ByDate.Reverse }}
-        <article class="article-item">
-          <h3><a href="{{ .RelPermalink }}">{{ .Title }}</a></h3>
-          <div class="article-meta">
-            <span class="article-date">{{ .Date.Format "2006-01-02" }}</span>
-            {{ if .Params.tags }}
-              <span class="article-tags">
-                {{ range .Params.tags }}
-                  <span class="tag">{{ . }}</span>
-                {{ end }}
-              </span>
-            {{ end }}
-          </div>
-        </article>
-      {{ end }}
-    </div>
-  </section>
+  {{ end }}
+  {{ end }}
 
 </div>
 
 <style>
+/* 首页布局 */
+.home {
+  max-width: 720px;
+  padding: 1rem var(--spacing-sm);
+}
+
+/* Section 标题行 */
 .home-section {
-  padding: var(--spacing-lg) 0;
+  padding: 1rem 0;
 }
 .home-section + .home-section {
   border-top: 1px solid var(--border-color);
 }
-
-/* 标题行 + "查看全部" 按钮 */
 .section-header {
   display: flex;
-  align-items: center;
+  align-items: baseline;
   justify-content: space-between;
-  margin-bottom: var(--spacing-md);
+  margin-bottom: 0.6rem;
 }
 .section-header h2 {
-  font-size: 1.8rem;
+  font-size: 1.1rem;
+  font-weight: 600;
   margin: 0;
   color: var(--text-color);
+  font-family: var(--font-sans);
 }
 .section-more {
-  font-size: 0.95rem;
+  font-size: 0.8rem;
   color: var(--link-color);
   text-decoration: none;
   white-space: nowrap;
+  margin-left: 1rem;
 }
 .section-more:hover {
   text-decoration: underline;
 }
 
-/* 小说卡片 */
-.novels-list {
+/* 小说列表 - 标题左日期右 */
+.novel-list {
   display: flex;
   flex-direction: column;
-  gap: var(--spacing-md);
+  gap: 0;
 }
 .novel-item {
-  padding: var(--spacing-md);
-  border: 1px solid var(--border-color);
-  border-radius: 8px;
-  transition: box-shadow var(--transition);
-}
-.novel-item:hover {
-  box-shadow: 0 4px 12px var(--shadow-color);
-}
-.novel-item h3 {
-  margin-bottom: var(--spacing-sm);
-}
-.novel-item h3 a {
-  color: var(--text-color);
-}
-.novel-meta,
-.article-meta {
   display: flex;
-  gap: var(--spacing-sm);
-  flex-wrap: wrap;
-  font-size: 0.9rem;
-  color: var(--text-color);
-  opacity: 0.7;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 0.5rem;
+  padding: 0.4rem 0;
+  border-bottom: 1px solid var(--border-color);
 }
-.novel-tags,
-.article-tags {
-  display: flex;
-  gap: var(--spacing-xs);
+.novel-item:last-child {
+  border-bottom: none;
+}
+.novel-title {
+  font-size: 0.95rem;
+  font-family: var(--font-sans);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-width: 0;
+}
+.novel-title a {
+  color: var(--text-color);
+  text-decoration: none;
+  font-weight: 500;
+}
+.novel-title a:hover {
+  color: var(--link-color);
+}
+.novel-chapter {
+  opacity: 0.6;
+  font-weight: 400;
+}
+.novel-date {
+  flex-shrink: 0;
+  white-space: nowrap;
+  font-size: 0.8rem;
+  color: var(--text-color);
+  opacity: 0.5;
+  font-family: var(--font-mono);
 }
 
-/* 文章列表 */
+/* 文章列表 - 标题左日期右 */
 .article-list {
   display: flex;
   flex-direction: column;
-  gap: var(--spacing-sm);
+  gap: 0;
 }
 .article-item {
-  padding: var(--spacing-sm) 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 0.5rem;
+  padding: 0.3rem 0;
+  font-size: 0.9rem;
+  font-family: var(--font-sans);
 }
-.article-item h3 {
-  margin-bottom: 0.25rem;
-  font-size: 1.1rem;
+.article-title {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-width: 0;
 }
-.article-item h3 a {
+.article-title a {
   color: var(--text-color);
   text-decoration: none;
 }
-.article-item h3 a:hover {
+.article-title a:hover {
   color: var(--link-color);
 }
+.article-date {
+  flex-shrink: 0;
+  white-space: nowrap;
+  color: var(--text-color);
+  opacity: 0.5;
+  font-size: 0.8rem;
+  font-family: var(--font-mono);
+}
 
-.tag {
-  background-color: rgba(162, 123, 92, 0.2);
-  padding: 0.25rem 0.5rem;
-  border-radius: 4px;
-  font-size: 0.85rem;
+/* 移动端适配 */
+@media (max-width: 600px) {
+  .home {
+    padding: 0.5rem var(--spacing-sm);
+  }
+  .section-header h2 {
+    font-size: 1rem;
+  }
+  .article-item {
+    font-size: 0.85rem;
+    gap: 0.35rem;
+  }
+  .article-date,
+  .novel-date {
+    font-size: 0.75rem;
+  }
 }
 </style>
 {{ end }}

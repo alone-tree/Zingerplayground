@@ -3,7 +3,7 @@ title: "八年投资，两轮牛熊，我在干什么"
 date: 2026-03-19
 draft: false
 tags: ["投资", "复盘"]
-category: "投资"
+category: "经济与投资"
 description: "从2018年上大学开始投资，经历两轮牛熊后我明白了自己是怎么亏钱的"
 ---
 

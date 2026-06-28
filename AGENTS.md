@@ -4,6 +4,8 @@
 
 Zinger's Playground 是 zikeb 的个人网站，基于 Hugo 静态网站生成器搭建，部署在 Netlify。GitHub 仓库：alone-tree/Zingerplayground。
 
+**所有页面设计、CSS 修改都必须遵循 [DESIGN.md](DESIGN.md) 中定义的设计规范，包括配色、间距、字体、布局原则等。新增模板或修改现有模板前先读 DESIGN.md。**
+
 ## 你应该知道的事
 
 ### 1. 技术栈
@@ -68,6 +70,7 @@ zikeb 的主要写作在思源笔记中（笔记本："自己写的文章"78 篇
 | netlify.toml | Netlify 部署配置（Hugo 版本、构建命令） |
 | STRUCTURE.md | 目录结构说明和文件命名规则 |
 | TEMPLATES.md | 内容模板和 Front Matter 字段说明 |
+| DESIGN.md | 设计规范（配色、间距、字体、布局原则） |
 | DEPLOY.md | 部署流程说明 |
 | PROJECT_LOG.md | 项目日志（想法、决策、踩坑记录） |
 | CHANGELOG.md | 版本变更记录 |

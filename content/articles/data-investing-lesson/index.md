@@ -3,7 +3,7 @@ title: "如果当初看一眼数据，股市能少亏点吗"
 date: 2026-03-25
 draft: false
 tags: ["投资", "数据分析"]
-category: "投资"
+category: "经济与投资"
 description: "回头看自己的投资，最大的问题不是没猜中拐点，而是连位置都没看过。"
 ---
 

@@ -44,7 +44,7 @@ cover: ""  # 可选：封面图路径 /images/articles/xxx.png
 
 | 字段 | 类型 | 必填 | 说明 |
 |------|------|------|------|
-| `category` | 字符串 | ✓ | 驱动文章列表页筛选按钮。当前可用：`AI与Coding`、`投资`、`自我觉察` |
+| `category` | 字符串 | ✓ | 驱动文章列表页筛选按钮。当前可用：`AI与Coding`、`经济与投资`、`自我觉察` |
 | `cover` | 字符串 | ✗ | 封面图路径。尺寸 21:9 横版（推荐 1200×514），放 `static/images/articles/` |
 
 - category 字段的值会被 articles/list.html 自动提取生成分类筛选按钮

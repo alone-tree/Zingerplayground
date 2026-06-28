@@ -3,7 +3,7 @@ title: "穿越回当年也没法靠比特币赚一个亿"
 date: 2025-12-14
 draft: false
 tags: ["投资", "比特币"]
-category: "投资"
+category: "经济与投资"
 description: "写中文描述，50字以内"
 ---
 

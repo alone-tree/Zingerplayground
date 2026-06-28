@@ -3,7 +3,7 @@ title: "我做了一套不能骗自己的投资账本"
 date: 2026-03-28
 draft: false
 tags: ["投资", "投资账本"]
-category: "投资"
+category: "经济与投资"
 description: "自己做了一只个人基金来记账，杜绝投资中骗自己的行为"
 ---
 
