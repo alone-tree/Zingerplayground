@@ -118,7 +118,46 @@ hugo --gc --minify
 
 > ⚠️ Windows 经验：不要传 `--disableFastRender --bind 127.0.0.1 --port 1313` 等多余参数——这些都是 Hugo 默认值。命令越短越可靠。
 
-### 7. 常见错误速查
+### 8. 标准启动流程（完整版）
+
+每次启动个人网站进行本地开发/验证时，按此顺序执行，不要跳过步骤，不要凭记忆简化。
+
+```bash
+# 第1步：清理旧进程
+taskkill /F /IM hugo.exe 2>/dev/null
+
+# 第2步：启动 Hugo 开发服务器（后台，不加 &，必须 -D 含草稿）
+terminal(background=true) → cd /d/Github/Zingerplayground && hugo server -D
+
+# 第3步：等待并验证服务启动
+wait 3s → curl -s -o /dev/null -w "%{http_code}" http://127.0.0.1:1313/
+# 期望返回 200
+
+# 第4步：在用户浏览器中打开（用户可见）
+cmd /c start "" "http://127.0.0.1:1313/"
+
+# 第5步：加载能力库「浏览器控制」MCP（Playwright headed 浏览器，你我都能看见和操作）
+cd /d/HermesSync/capability-library
+python tools/mcp/load_mcp.py --name "浏览器控制"
+
+# 第6步：导航到本地网站
+python tools/mcp/use_tool.py --mcp "浏览器控制" --tool "browser_navigate" --params-json "{\"url\": \"http://127.0.0.1:1313/\"}"
+```
+
+**原理说明：**
+- Hugo 开发服务器用 `background=true`，**不能加 `&`**（加了子 shell 立即退出，Hermes 以为进程结束了）
+- `-D` 包含草稿内容（`draft: true` 的文章也会显示）
+- `cmd /c start` 在 Windows 默认浏览器中打开页面，用户能直接看见
+- 能力库「浏览器控制」MCP 启动 headed Chromium，窗口弹出在桌面上，AI 能通过 `use_tool.py` 操控，用户也能直接交互
+- 第一步清理旧进程是必需的，Hugo 端口被占用时不会报错但无法访问
+
+**停止：**
+```bash
+taskkill /F /IM hugo.exe
+# 浏览器窗口手动关闭即可
+```
+
+### 9. 常见错误速查
 
 最容易踩的坑，按致命程度排列：
 

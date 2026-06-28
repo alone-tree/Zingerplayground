@@ -30,7 +30,7 @@ enableGitInfo = false
     weight = 3
   
   [[menu.main]]
-    name = "代码"
+    name = "程序"
     url = "/code/"
     weight = 4
   
