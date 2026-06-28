@@ -32,9 +32,6 @@ draft: false
 
 其他的平台：
 
-微信公众号：清醒杂货店
-![公众号二维码](/images/qrcode-wechat.jpg){: style="width:120px; height:auto;" }
+微信公众号：清醒杂货店 <img src="/images/qrcode-wechat.jpg" style="width:100px; vertical-align:middle; border-radius:4px; margin-left:8px;" alt="公众号二维码" />
 
-Reddit: [Mountain_Ad8731](https://www.reddit.com/user/Mountain_Ad8731/)
-
-GitHub: [alone-tree](https://github.com/alone-tree)
+Reddit： [Mountain_Ad8731](https://www.reddit.com/user/Mountain_Ad8731/) &nbsp;|&nbsp; GitHub： [alone-tree](https://github.com/alone-tree)
