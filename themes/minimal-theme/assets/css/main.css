@@ -409,6 +409,23 @@ img {
     grid-template-columns: 1fr;
     gap: 1rem;
   }
+  .category-tabs {
+    justify-content: flex-start;
+    overflow-x: auto;
+    white-space: nowrap;
+    gap: 0.5rem;
+    padding-bottom: 0.5rem;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+  .category-tabs::-webkit-scrollbar {
+    display: none;
+  }
+  .tab-button {
+    flex-shrink: 0;
+    font-size: 0.8rem;
+    padding: 0.35rem 0.75rem;
+  }
 }
 
 /* 响应式设计 */
