@@ -1,6 +1,10 @@
 # 变更日志
 
-## 2026-06-28 — 文档更新
+## 2026-06-28 — 域名修正
+
+### 修复
+- config.toml baseURL 从 `zingerplayground.netlify.app` 改为 `zingerplayground.top`
+- 主题 header.html logo 链接从 `{{ .Site.BaseURL }}` 改为固定 `href="/"`，以后域名变动不影响导航（极小改动，经确认）
 
 ### 变更
 - AGENTS.md：板块状态更新到最新、补充域名信息、新增分类筛选机制说明、补全做事约定（流程规范）
