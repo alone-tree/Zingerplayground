@@ -1,0 +1,246 @@
+{{ define "title" }}{{ .Site.Title }}{{ end }}
+{{ define "main" }}
+<div class="container">
+
+  <!-- ===== 最新小说 ===== -->
+  <section class="home-section">
+    <div class="section-header">
+      <h2>最新小说</h2>
+      <a href="/novels/" class="section-more">查看所有小说 →</a>
+    </div>
+    <div class="novels-list">
+      {{/* 按 date 倒序取每部小说的最新一章 */}}
+      {{ $novels := where .Site.RegularPages "Section" "novels" }}
+      {{ $novels = where $novels "Kind" "page" }}
+      {{ $uniqueNovels := slice }}
+      {{ $seenNovels := slice }}
+      {{ range $novels.ByDate.Reverse }}
+        {{ $novelName := .Params.novel | default .Title }}
+        {{ if not (in $seenNovels $novelName) }}
+          {{ $uniqueNovels = $uniqueNovels | append . }}
+          {{ $seenNovels = $seenNovels | append $novelName }}
+        {{ end }}
+        {{ if ge (len $uniqueNovels) 2 }}{{ break }}{{ end }}
+      {{ end }}
+      {{ range $uniqueNovels }}
+        <article class="novel-item">
+          <h3><a href="{{ .RelPermalink }}">{{ .Params.novel | default .Title }}</a></h3>
+          <div class="novel-meta">
+            <span class="novel-chapter">
+              {{ if .Params.chapter }}第{{ .Params.chapter }}章: {{ end }}{{ .Title }}
+            </span>
+            <span class="novel-date">{{ .Date.Format "2006-01-02" }}</span>
+            {{ if .Params.tags }}
+              <span class="novel-tags">
+                {{ range .Params.tags }}
+                  <span class="tag">{{ . }}</span>
+                {{ end }}
+              </span>
+            {{ end }}
+          </div>
+        </article>
+      {{ end }}
+    </div>
+  </section>
+
+  <!-- ===== AI与Coding ===== -->
+  <section class="home-section">
+    <div class="section-header">
+      <h2>AI与Coding</h2>
+      <a href="/articles/" class="section-more">查看全部 →</a>
+    </div>
+    <div class="article-list">
+      {{ $ai := where (where .Site.RegularPages "Section" "articles") "Params.category" "AI与Coding" }}
+      {{ range first 3 $ai.ByDate.Reverse }}
+        <article class="article-item">
+          <h3><a href="{{ .RelPermalink }}">{{ .Title }}</a></h3>
+          <div class="article-meta">
+            <span class="article-date">{{ .Date.Format "2006-01-02" }}</span>
+            {{ if .Params.tags }}
+              <span class="article-tags">
+                {{ range .Params.tags }}
+                  <span class="tag">{{ . }}</span>
+                {{ end }}
+              </span>
+            {{ end }}
+          </div>
+        </article>
+      {{ end }}
+    </div>
+  </section>
+
+  <!-- ===== 投资 ===== -->
+  <section class="home-section">
+    <div class="section-header">
+      <h2>投资</h2>
+      <a href="/articles/" class="section-more">查看全部 →</a>
+    </div>
+    <div class="article-list">
+      {{ $invest := where (where .Site.RegularPages "Section" "articles") "Params.category" "投资" }}
+      {{ range first 3 $invest.ByDate.Reverse }}
+        <article class="article-item">
+          <h3><a href="{{ .RelPermalink }}">{{ .Title }}</a></h3>
+          <div class="article-meta">
+            <span class="article-date">{{ .Date.Format "2006-01-02" }}</span>
+            {{ if .Params.tags }}
+              <span class="article-tags">
+                {{ range .Params.tags }}
+                  <span class="tag">{{ . }}</span>
+                {{ end }}
+              </span>
+            {{ end }}
+          </div>
+        </article>
+      {{ end }}
+    </div>
+  </section>
+
+  <!-- ===== 自我觉察 ===== -->
+  <section class="home-section">
+    <div class="section-header">
+      <h2>自我觉察</h2>
+      <a href="/articles/" class="section-more">查看全部 →</a>
+    </div>
+    <div class="article-list">
+      {{ $self := where (where .Site.RegularPages "Section" "articles") "Params.category" "自我觉察" }}
+      {{ range first 3 $self.ByDate.Reverse }}
+        <article class="article-item">
+          <h3><a href="{{ .RelPermalink }}">{{ .Title }}</a></h3>
+          <div class="article-meta">
+            <span class="article-date">{{ .Date.Format "2006-01-02" }}</span>
+            {{ if .Params.tags }}
+              <span class="article-tags">
+                {{ range .Params.tags }}
+                  <span class="tag">{{ . }}</span>
+                {{ end }}
+              </span>
+            {{ end }}
+          </div>
+        </article>
+      {{ end }}
+    </div>
+  </section>
+
+  <!-- ===== 社会观察 ===== -->
+  <section class="home-section">
+    <div class="section-header">
+      <h2>社会观察</h2>
+      <a href="/articles/" class="section-more">查看全部 →</a>
+    </div>
+    <div class="article-list">
+      {{ $society := where (where .Site.RegularPages "Section" "articles") "Params.category" "社会观察" }}
+      {{ range first 3 $society.ByDate.Reverse }}
+        <article class="article-item">
+          <h3><a href="{{ .RelPermalink }}">{{ .Title }}</a></h3>
+          <div class="article-meta">
+            <span class="article-date">{{ .Date.Format "2006-01-02" }}</span>
+            {{ if .Params.tags }}
+              <span class="article-tags">
+                {{ range .Params.tags }}
+                  <span class="tag">{{ . }}</span>
+                {{ end }}
+              </span>
+            {{ end }}
+          </div>
+        </article>
+      {{ end }}
+    </div>
+  </section>
+
+</div>
+
+<style>
+.home-section {
+  padding: var(--spacing-lg) 0;
+}
+.home-section + .home-section {
+  border-top: 1px solid var(--border-color);
+}
+
+/* 标题行 + "查看全部" 按钮 */
+.section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--spacing-md);
+}
+.section-header h2 {
+  font-size: 1.8rem;
+  margin: 0;
+  color: var(--text-color);
+}
+.section-more {
+  font-size: 0.95rem;
+  color: var(--link-color);
+  text-decoration: none;
+  white-space: nowrap;
+}
+.section-more:hover {
+  text-decoration: underline;
+}
+
+/* 小说卡片 */
+.novels-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+}
+.novel-item {
+  padding: var(--spacing-md);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  transition: box-shadow var(--transition);
+}
+.novel-item:hover {
+  box-shadow: 0 4px 12px var(--shadow-color);
+}
+.novel-item h3 {
+  margin-bottom: var(--spacing-sm);
+}
+.novel-item h3 a {
+  color: var(--text-color);
+}
+.novel-meta,
+.article-meta {
+  display: flex;
+  gap: var(--spacing-sm);
+  flex-wrap: wrap;
+  font-size: 0.9rem;
+  color: var(--text-color);
+  opacity: 0.7;
+}
+.novel-tags,
+.article-tags {
+  display: flex;
+  gap: var(--spacing-xs);
+}
+
+/* 文章列表 */
+.article-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+}
+.article-item {
+  padding: var(--spacing-sm) 0;
+}
+.article-item h3 {
+  margin-bottom: 0.25rem;
+  font-size: 1.1rem;
+}
+.article-item h3 a {
+  color: var(--text-color);
+  text-decoration: none;
+}
+.article-item h3 a:hover {
+  color: var(--link-color);
+}
+
+.tag {
+  background-color: rgba(162, 123, 92, 0.2);
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  font-size: 0.85rem;
+}
+</style>
+{{ end }}
