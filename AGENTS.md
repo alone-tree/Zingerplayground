@@ -10,7 +10,8 @@ Zinger's Playground 是 zikeb 的个人网站，基于 Hugo 静态网站生成�
 
 - Hugo Extended 0.139.0 + Go Modules
 - 自建主题：themes/minimal-theme（极简设计，深色/浅色模式自适应）
-- 部署：Netlify，推送到 main 分支自动构建部署
+- `baseURL` 已更新为 `https://zingerplayground.top/`（2026-06）
+- Netlify 自动部署，推送到 main 分支时会自动构建
 - 构建命令：`hugo --gc --minify`，输出目录：`public/`
 - 语言：中文（zh-cn）
 
@@ -18,14 +19,17 @@ Zinger's Playground 是 zikeb 的个人网站，基于 Hugo 静态网站生成�
 
 网站有 6 个板块：首页、小说、文章、代码、摄影、播客、关于。
 
-**各板块状态（2026-05-24）：**
+**各板块状态（2026-06-28）：**
 - 小说：《完美伴侣》8 章 + 封面 + 简介
-- 文章：6 篇，分类 AI编程/投资/自我觉察，卡片式布局 + 分类筛选
-- 代码：3 个项目（siyuan-agent-bridge / siyuan-sisyphus / TextDrop），卡片式布局
+- 文章：7 篇，分类 AI/AI编程/投资/自我觉察，卡片式布局 + 分类筛选（JS 按钮切换）
+- 代码：4 个项目（siyuan-agent-bridge / siyuan-sisyphus / TextDrop / 思源桥遥测看板），卡片式布局
 - 摄影：清迈艺术集市专题 9 张照片，Masonry 画廊
 - 关于：个人介绍页，窄容器排版
 - 播客：空壳
 - 所有模板（除小说外）：layouts/articles/*, layouts/code/*, layouts/photography/*, layouts/about/* — 统一复用 CSS 变量，卡片悬停动效，深/浅色模式自适应
+
+**分类筛选机制：**
+articles/list.html 会自动提取所有文章 `.Params.category` 字段的去重值，生成顶部筛选按钮（「全部」+ 各 category）。点击按钮后 JavaScript 按 `data-category` 隐藏/显示卡片。新增文章只需在 front matter 中设置 `category` 字段即可自动出现在筛选栏中。
 
 内容模板和目录结构规则详见：
 - [STRUCTURE.md](STRUCTURE.md) — 目录结构、文件命名规则
@@ -37,6 +41,8 @@ Zinger's Playground 是 zikeb 的个人网站，基于 Hugo 静态网站生成�
 - 短篇 `category` 必须是 `"短篇"`，中长篇必须是 `"中长篇"`
 - 中长篇简介必须加 `layout: "list"`
 - `draft: true` 的内容不会在网站上显示
+- 文章（非小说）的 `category` 字段会驱动文章列表页的分类筛选按钮（JS 自动生成）
+- 所有文档必须用中文撰写，禁止用英文
 
 ### 3. 内容来源
 
@@ -52,6 +58,7 @@ zikeb 的主要写作在思源笔记中（笔记本："自己写的文章"78 篇
 - 不要改动 netlify.toml 和 config.toml——除非明确讨论过
 - 新增内容时严格遵守 TEMPLATES.md 中的模板格式
 - **做任何事之后，立即同步更新 PROJECT_LOG.md 和 CHANGELOG.md。** 做完一件记一件，不要等批次结束再统一补。这条是 zikeb 最在意的规则，遗漏会被严厉纠正。
+- **遵守流程规范：** 操作时必须严格遵循已定义的文档和工作流，不能图快跳步骤。尤其在思源笔记操作上，必须走能力库 MCP 链路（load_mcp → siyuan_start → use_tool），不能直接调 SiYuan API。写入需 confirmed=true。
 
 ### 5. 关键文件
 

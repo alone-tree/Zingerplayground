@@ -1,8 +1,64 @@
 # 网站目录结构说明
 
-## 内容组织
+```
+content/
+├── about.md                    # 关于页面
+├── posts/
+│   └── hello-world.md          # 示例文章
+├── articles/
+│   ├── _index.md               # 文章板块首页（空壳，Hugo 自动生成列表）
+│   ├── my-article.md           # 单篇文章
+│   └── ...                     # 更多文章
+├── code/
+│   ├── _index.md               # 代码板块首页
+│   ├── my-project.md           # 单个项目介绍
+│   └── ...
+├── novels/
+│   └── ...                     # 见下方小说结构
+├── photography/
+│   └── ...                     # 见下方摄影结构
+└── ...
+```
 
-### 小说板块 (content/novels/)
+### 文章板块 (content/articles/)
+
+```
+content/articles/
+├── _index.md                   # 文章板块首页（自动生成列表）
+├── my-article.md              # 单个文章文件
+├── another-article.md         # 更多文章
+└── ...
+```
+
+- **位置**：直接放在 `content/articles/` 目录下
+- **格式**：单个 `.md` 文件（非帖文格式，前后 `---` 分隔 front matter）
+- **命名**：`article-name.md`（英文和连字符）
+- **图片**：封面图通过 front matter `cover` 字段指向 `static/images/articles/` 目录
+
+**访问路径：**
+
+| 页面类型 | URL 路径 | 说明 |
+|---------|---------|------|
+| 文章列表 | `/articles/` | 显示所有文章卡片（含分类筛选按钮） |
+| 单篇文章 | `/articles/my-article/` | 文章详情页 |
+
+### 代码板块 (content/code/)
+
+类似文章板块：
+- 文件直接放 `content/code/` 下
+- 命名：`project-name.md`
+
+**访问路径：**
+
+| 页面类型 | URL 路径 | 说明 |
+|---------|---------|------|
+| 代码列表 | `/code/` | 显示所有项目卡片 |
+| 单个项目 | `/code/my-project/` | 项目详情页，默认用 single.html |
+| 遥测看板 | `/code/siyuan-bridge-telemetry/` | 特殊页面，用 telemetry.html 独立模板 |
+
+---
+
+## 小说板块 (content/novels/)
 
 ```
 content/novels/
@@ -65,10 +121,23 @@ static/images/
 │   └── mountain-sea.jpg
 ├── default/             # 默认占位图
 │   └── novel-cover.jpg
+├── articles/            # 文章封面图（21:9 横版）
+│   └── article-name-cover.png
 └── novels/              # 小说封面（可选）
     └── your-novel/
         └── cover.jpg
 ```
+
+## 网站板块总览
+
+| 板块 | 内容路径 | 模板位置 | 特殊规则 |
+|------|---------|---------|---------|
+| 首页 | content/_index.md | themes/minimal-theme/layouts/index.html | — |
+| 关于 | content/about.md | layouts/about/single.html | 窄容器 750px |
+| 文章 | content/articles/ | layouts/articles/list.html + single.html | JS 分类筛选（按 category 字段） |
+| 代码 | content/code/ | layouts/code/list.html + single.html | telemetry.html 独立模板 |
+| 小说 | content/novels/ | themes/minimal-theme/layouts/ | _index.md / index.md 命名规则 |
+| 摄影 | content/photography/ | layouts/photography/list.html + single.html | — |
 
 ## 示例
 

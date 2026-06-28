@@ -4,6 +4,17 @@
 
 ---
 
+## 2026-06-28 — 域名切换
+
+### 变更
+
+- 域名从 `zingerplayground.netlify.app` 切换到 `zingerplayground.top`
+- 原因：Cloudflare 默认的 `netlify.app` 域名在国内访问经常被污染/阻断，换用自有域名解决
+- config.toml baseURL 已更新
+- 线上访问：https://zingerplayground.top/code/siyuan-bridge-telemetry/ 已验证正常
+
+---
+
 ## 2026-06-27 — 思源桥遥测看板上线
 
 ### 新增

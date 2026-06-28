@@ -25,6 +25,33 @@ cover: ""  # 可选：封面图路径
 
 ```
 
+```markdown
+---
+title: "你的文章标题"
+date: 2025-10-30
+draft: false
+tags: ["AI", "编程"]
+category: "AI编程"
+description: "卡片页展示的一句话简介"
+cover: ""  # 可选：封面图路径 /images/articles/xxx.png
+---
+
+正文内容...
+
+```
+
+**文章专用字段说明：**
+
+| 字段 | 类型 | 必填 | 说明 |
+|------|------|------|------|
+| `category` | 字符串 | ✓ | 驱动文章列表页筛选按钮。当前可用：`AI`、`AI编程`、`投资`、`自我觉察` |
+| `cover` | 字符串 | ✗ | 封面图路径。尺寸 21:9 横版（推荐 1200×514），放 `static/images/articles/` |
+
+- category 字段的值会被 articles/list.html 自动提取生成分类筛选按钮
+- 新增分类无需改模板，只需在 front matter 中使用新 category 值即可
+
+---
+
 ### 添加中长篇小说
 
 #### 步骤 1：创建小说文件夹和简介
@@ -88,6 +115,16 @@ category: "中长篇"
 | `tags` | 数组 | ✓ | 标签列表 |
 | `description` | 字符串 | ✓ | 简介（显示在卡片上） |
 | `cover` | 字符串 | ✗ | 封面图路径 |
+
+### 封面图路径说明
+
+| 使用场景 | 路径格式 | 实际存放位置 |
+|---------|---------|------------|
+| 小说封面 | `/images/novels/小说名/cover.jpg` | `static/images/novels/小说名/cover.jpg` |
+| 文章封面 | `/images/articles/文章名-cover.png` | `static/images/articles/文章名-cover.png` |
+| Hero 横幅 | `/images/hero/mountain-sea.jpg` | `static/images/hero/mountain-sea.jpg` |
+
+文章封面推荐尺寸：21:9 横版（约 1200×514），放在 `static/images/articles/` 下。路径写相对路径 `/images/articles/xxx.png`。
 
 ### 短篇小说专用字段
 
