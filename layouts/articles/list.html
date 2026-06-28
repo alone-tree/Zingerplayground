@@ -21,26 +21,26 @@
     </div>
     {{ end }}
 
-    <!-- 文章卡片网格 -->
-    <div class="list-grid">
+    <!-- 文章列表 -->
+    <div class="article-list-full">
       {{ range .Pages.ByDate.Reverse }}
-        <article class="list-card" data-category="{{ .Params.category }}">
-          <div class="list-card-body">
-            <h2><a href="{{ .RelPermalink }}">{{ .Title }}</a></h2>
-            {{ if .Params.description }}
-              <p class="list-card-desc">{{ .Params.description }}</p>
-            {{ else }}
-              <p class="list-card-desc">{{ .Summary | truncate 120 }}</p>
+        <article class="article-row" data-category="{{ .Params.category }}">
+          <div class="article-row-header">
+            <h2 class="article-row-title"><a href="{{ .RelPermalink }}">{{ .Title }}</a></h2>
+            <span class="article-row-date">{{ .Date.Format "2006-01-02" }}</span>
+          </div>
+          {{ if .Params.description }}
+            <p class="article-row-desc">{{ .Params.description }}</p>
+          {{ else }}
+            <p class="article-row-desc">{{ .Summary | truncate 120 }}</p>
+          {{ end }}
+          <div class="article-row-meta">
+            {{ if .Params.category }}
+              <span class="category-badge">{{ .Params.category }}</span>
             {{ end }}
-            <div class="list-card-meta">
-              {{ if .Params.category }}
-                <span class="category-badge">{{ .Params.category }}</span>
-              {{ end }}
-              <span class="list-date">{{ .Date.Format "2006-01-02" }}</span>
-              {{ range .Params.tags }}
-                <span class="tag">{{ . }}</span>
-              {{ end }}
-            </div>
+            {{ range .Params.tags }}
+              <span class="tag">{{ . }}</span>
+            {{ end }}
           </div>
         </article>
       {{ end }}
@@ -48,21 +48,86 @@
   </section>
 </div>
 
+<style>
+.article-list-full {
+  display: flex;
+  flex-direction: column;
+}
+.article-row {
+  padding: 1.25rem 0;
+  border-bottom: 1px solid var(--border-color);
+}
+.article-row:last-child {
+  border-bottom: none;
+}
+.article-row-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 1rem;
+  margin-bottom: 0.4rem;
+}
+.article-row-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin: 0;
+  line-height: 1.4;
+  font-family: var(--font-sans);
+}
+.article-row-title a {
+  color: var(--text-color);
+  text-decoration: none;
+}
+.article-row-title a:hover {
+  color: var(--link-color);
+}
+.article-row-date {
+  flex-shrink: 0;
+  white-space: nowrap;
+  font-size: 0.85rem;
+  opacity: 0.5;
+  font-family: var(--font-mono);
+}
+.article-row-desc {
+  font-size: 0.9rem;
+  line-height: 1.5;
+  margin: 0 0 0.5rem 0;
+  opacity: 0.75;
+  font-family: var(--font-sans);
+}
+.article-row-meta {
+  display: flex;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+@media (max-width: 600px) {
+  .article-row-header {
+    flex-direction: column;
+    gap: 0.2rem;
+  }
+  .article-row-title {
+    font-size: 1rem;
+  }
+}
+</style>
+
 <script>
 document.addEventListener('DOMContentLoaded', function() {
   const tabs = document.querySelectorAll('.tab-button');
-  const cards = document.querySelectorAll('.list-card');
+  const rows = document.querySelectorAll('.article-row');
 
   tabs.forEach(tab => {
     tab.addEventListener('click', function() {
       const category = this.dataset.category;
       tabs.forEach(t => t.classList.remove('active'));
       this.classList.add('active');
-      cards.forEach(card => {
-        if (category === 'all' || card.dataset.category === category) {
-          card.style.display = '';
+      rows.forEach(row => {
+        if (category === 'all' || row.dataset.category === category) {
+          row.style.display = '';
         } else {
-          card.style.display = 'none';
+          row.style.display = 'none';
         }
       });
     });
